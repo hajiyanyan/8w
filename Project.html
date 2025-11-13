@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目实训 | 职场实训沙盘</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(90deg, #2c3e50, #4a6491);
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: #2c3e50;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 18px 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: #34495e;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f1f1f1;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            color: #3498db;
+            padding-left: 25px;
+        }
+
+        .dropdown-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 内容区域样式 */
+        .content {
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        .content h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        /* 项目实训介绍区域 */
+        .project-intro {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .project-intro h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .project-intro h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        /* 功能模块区域 - 三个并排 */
+        .features-row {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+            justify-content: space-between;
+        }
+
+        .feature-card {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border-top: 4px solid #3498db;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-header {
+            padding: 25px;
+            background: #f8f9fa;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .feature-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-content p {
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li i {
+            margin-right: 10px;
+            color: #27ae60;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #2c3e50;
+        }
+
+        .btn-secondary:hover {
+            background: #1a252f;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .nav-list {
+                flex-wrap: wrap;
+            }
+
+            .nav-item {
+                flex: 1 1 33.333%;
+            }
+
+            .features-row {
+                flex-wrap: wrap;
+            }
+
+            .feature-card {
+                flex: 1 1 calc(50% - 15px);
+                min-width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-item {
+                flex: 1 1 50%;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .features-row {
+                flex-direction: column;
+            }
+
+            .feature-card {
+                flex: 1 1 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-item {
+                flex: 1 1 100%;
+            }
+
+            .dropdown {
+                width: 100%;
+                left: 0;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .feature-card {
+                margin-bottom: 20px;
+            }
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 1rem;
+        }
+
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>项目实训</h1>
+        <p class="subtitle">在求职和成长的道路上，一个扎实的项目经历胜过千言万语。在这里，用最小的成本，发现并补齐最大的知识漏洞。</p>
+    </header>
+
+    <div class="container">
+        <nav class="navbar">
+            <ul class="nav-list">
+                <!-- 模块1：岗位分析 -->
+                <li class="nav-item">
+                    <a href="Post_analysis.html" class="nav-link">
+                        <i class="fas fa-home"></i>岗位分析
+                    </a>
+                    <div class="dropdown">
+                        <a href="Post_analysis.html#Basic-situation" class="dropdown-item"><i
+                                class="fas fa-star"></i>岗位信息</a>
+                        <a href="Post_analysis.html#Skill-require" class="dropdown-item"><i
+                                class="fas fa-bullhorn"></i>技能要求</a>
+                        <a href="Post_analysis.html#Skill-require" class="dropdown-item"><i
+                                class="fas fa-chart-line"></i>可视化分析</a>
+                        <a href="Post_analysis.html#Develop-path" class="dropdown-item"><i
+                                class="fas fa-question-circle"></i>职业发展路径</a>
+                    </div>
+                </li>
+
+                <!-- 模块2：用户简历 -->
+                <li class="nav-item">
+                    <a href="Resume.html" class="nav-link">
+                        <i class="fas fa-box-open"></i>用户简历
+                    </a>
+                    <div class="dropdown">
+                        <a href="Resume_excellent.html" class="dropdown-item"><i class="fas fa-laptop"></i>模范简历选</a>
+                        <a href="Resume_mould.html" class="dropdown-item"><i class="fas fa-mobile-alt"></i>简历模板</a>
+                        <a href="Resume_test.html" class="dropdown-item"><i class="fas fa-cloud"></i>简历实训测评</a>
+                        <a href="Resume_test.html" class="dropdown-item"><i class="fas fa-cogs"></i>简历优化建议</a>
+                    </div>
+                </li>
+
+                <!-- 模块3：面试阶段-->
+                <li class="nav-item">
+                    <a href="Interview_write.html" class="nav-link">
+                        <i class="fas fa-concierge-bell"></i>笔试+面试
+                    </a>
+                    <div class="dropdown">
+                        <a href="Interview_write.html" class="dropdown-item"><i class="fas fa-palette"></i>笔试系统</a>
+                        <a href="Interview.html" class="dropdown-item"><i class="fas fa-headset"></i>面试系统</a>
+                    </div>
+                </li>
+
+                <!-- 模块4：项目阶段 -->
+                <li class="nav-item">
+                    <a href="Project.html" class="nav-link">
+                        <i class="fas fa-book"></i>项目实训
+                    </a>
+                    <div class="dropdown">
+                        <a href="Project_test.html" class="dropdown-item"><i class="fas fa-file-alt"></i>技能自测题库</a>
+                        <a href="Project_video.html" class="dropdown-item"><i class="fas fa-video"></i>视频教程</a>
+                        <a href="Project_finall_test.html" class="dropdown-item"><i class="fas fa-blog"></i>项目完成度测评</a>
+                    </div>
+                </li>
+
+                <!-- 模块5：关于我们 -->
+                <li class="nav-item">
+                    <a href="Evaluation.html" class="nav-link">
+                        <i class="fas fa-users"></i>关于我们
+                    </a>
+                    <div class="dropdown">
+                        <a href="Evaluation.html" class="dropdown-item"><i class="fas fa-award"></i>评价与反馈</a>
+                        <a href="Evaluation.html#contact" class="dropdown-item"><i
+                                class="fas fa-map-marker-alt"></i>联系我们</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <h2>项目实训</h2>
+            <p>通过实际项目练习，提升您的专业技能和实战经验，为职场做好准备。</p>
+
+            <div class="project-intro">
+                <h3><i class="fas fa-lightbulb"></i> 项目实训介绍</h3>
+                <p>项目实训是职场实训沙盘的核心模块，通过模拟真实工作场景中的项目开发流程，帮助您将理论知识转化为实践能力。我们提供从技能自测到项目完成的完整实训体系，确保您在每个环节都能得到充分的锻炼和指导。</p>
+            </div>
+
+            <!-- 三个功能并排展示 -->
+            <div class="features-row">
+                <!-- 技能自测题库 -->
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3 class="feature-title">技能自测题库</h3>
+                        <p class="feature-subtitle">检验您的专业技能水平</p>
+                    </div>
+                    <div class="feature-content">
+                        <p>通过专业的技能测试题库，全面评估您在各个技术领域的掌握程度，发现知识盲点，为后续学习提供方向。</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> 涵盖前端、后端、数据库等全栈技能</li>
+                            <li><i class="fas fa-check"></i> 难度分级，从基础到高级</li>
+                            <li><i class="fas fa-check"></i> 实时评分与详细解析</li>
+                            <li><i class="fas fa-check"></i> 个性化学习建议</li>
+                            <li><i class="fas fa-check"></i> 错题记录与复习功能</li>
+                        </ul>
+                        <a href="Project_test.html" class="btn">开始技能自测</a>
+                    </div>
+                </div>
+
+                <!-- 视频教程 -->
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3 class="feature-title">视频教程</h3>
+                        <p class="feature-subtitle">系统学习项目开发技能</p>
+                    </div>
+                    <div class="feature-content">
+                        <p>由行业专家录制的实战视频教程，涵盖项目开发全流程，从环境搭建到项目部署，手把手教您完成真实项目。</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> 项目实战导向的课程设计</li>
+                            <li><i class="fas fa-check"></i> 资深工程师亲自讲解</li>
+                            <li><i class="fas fa-check"></i> 配套源码与文档下载</li>
+                            <li><i class="fas fa-check"></i> 在线编码环境实践</li>
+                            <li><i class="fas fa-check"></i> 学习进度跟踪与证书</li>
+                        </ul>
+                        <a href="Project_video.html" class="btn">浏览视频教程</a>
+                    </div>
+                </div>
+
+                <!-- 项目完成度测评 -->
+                <div class="feature-card">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i class="fas fa-blog"></i>
+                        </div>
+                        <h3 class="feature-title">项目完成度测评</h3>
+                        <p class="feature-subtitle">评估您的项目实战能力</p>
+                    </div>
+                    <div class="feature-content">
+                        <p>通过AI智能评估系统，对您完成的项目进行全方位测评，提供专业反馈和改进建议，帮助您持续提升项目开发能力。</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> 代码质量与规范检查</li>
+                            <li><i class="fas fa-check"></i> 功能完整性评估</li>
+                            <li><i class="fas fa-check"></i> 性能与优化建议</li>
+                            <li><i class="fas fa-check"></i> 项目文档评估</li>
+                            <li><i class="fas fa-check"></i> 个性化改进方案</li>
+                        </ul>
+                        <a href="Project_finall_test.html" class="btn">开始项目测评</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-intro" style="margin-top: 40px;">
+                <h3><i class="fas fa-rocket"></i> 实训流程</h3>
+                <p>我们的项目实训采用科学的"测-学-练-评"四步法：首先通过技能自测了解自身水平，然后观看视频教程学习相关知识，接着动手完成实际项目，最后通过项目测评获得专业反馈。这一完整流程确保您在每个环节都能获得实质性提升。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 职场实训 | 本项目由 <span class="highlight">501全体人员</span> 共同创建</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navItems = document.querySelectorAll('.nav-item');
+            const featureCards = document.querySelectorAll('.feature-card');
+
+            // 导航栏交互效果
+            navItems.forEach(item => {
+                item.addEventListener('mouseenter', function () {
+                    this.style.backgroundColor = '#34495e';
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    this.style.backgroundColor = '';
+                });
+            });
+
+            // 功能卡片动画效果
+            featureCards.forEach(card => {
+                card.addEventListener('mouseenter', function () {
+                    this.style.transform = 'translateY(-10px)';
+                });
+
+                card.addEventListener('mouseleave', function () {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // 移动设备下拉菜单处理
+            if (window.innerWidth <= 768) {
+                navItems.forEach(item => {
+                    item.addEventListener('click', function (e) {
+                        if (this.querySelector('.dropdown').style.display === 'block') {
+                            this.querySelector('.dropdown').style.display = 'none';
+                        } else {
+                            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                                dropdown.style.display = 'none';
+                            });
+                            this.querySelector('.dropdown').style.display = 'block';
+                        }
+                        e.preventDefault();
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

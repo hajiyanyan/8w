@@ -1,0 +1,1791 @@
+<!-- 再岗位分析页面中选择各种岗位 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>岗位分析 - 职场实训沙盘</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(90deg, #2c3e50, #4a6491);
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: #2c3e50;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 18px 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: #34495e;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f1f1f1;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            color: #3498db;
+            padding-left: 25px;
+        }
+
+        .dropdown-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 内容区域样式 */
+        .content {
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        /* 岗位分析标题样式 */
+        .job-analysis-title {
+            text-align: left;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .job-analysis-title h2 {
+            color: #2c3e50;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+
+        }
+
+        .job-analysis-title h2 i {
+            margin-right: 12px;
+            color: #3498db;
+            font-size: 1.5rem;
+        }
+
+        .job-analysis-title p {
+            color: #666;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* 行业选择区域 */
+        .industry-selector {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .industry-selector h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .industry-selector h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .industry-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .industry-tab {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            font-weight: 500;
+        }
+
+        .industry-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        .industry-tab.active {
+            border-color: #3498db;
+            background: #f0f8ff;
+        }
+
+        .job-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .job-option {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .job-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        .job-option.selected {
+            border-color: #3498db;
+            background: #f0f8ff;
+        }
+
+        .job-option h4 {
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .job-option p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* 分析模块样式 */
+        .analysis-modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .analysis-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid #3498db;
+        }
+
+        .analysis-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .analysis-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+        }
+
+        .analysis-card h3 i {
+            margin-right: 12px;
+            color: #3498db;
+            font-size: 1.6rem;
+        }
+
+        .analysis-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .analysis-list li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #e0e0e0;
+            display: flex;
+            align-items: center;
+        }
+
+        .analysis-list li:last-child {
+            border-bottom: none;
+        }
+
+        .analysis-list li i {
+            margin-right: 10px;
+            color: #27ae60;
+            font-size: 0.9rem;
+        }
+
+        /* 技能与可视化同行布局 */
+        .skills-visualization-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .skills-section,
+        .visualization-section {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .skills-list {
+            list-style-type: none;
+        }
+
+        .skills-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f1f1;
+            display: flex;
+            align-items: center;
+        }
+
+        .skills-list li:last-child {
+            border-bottom: none;
+        }
+
+        .skills-list li i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        /* 六边形雷达图样式 */
+        .radar-chart {
+            width: 100%;
+            height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .radar-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+
+        .radar-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px solid #eaeaea;
+        }
+
+        .radar-grid:nth-child(2) {
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+        }
+
+        .radar-grid:nth-child(3) {
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+        }
+
+        .radar-grid:nth-child(4) {
+            width: 40%;
+            height: 40%;
+            top: 30%;
+            left: 30%;
+        }
+
+        .radar-grid:nth-child(5) {
+            width: 20%;
+            height: 20%;
+            top: 40%;
+            left: 40%;
+        }
+
+        .radar-axis {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1px;
+            height: 50%;
+            background: #eaeaea;
+            transform-origin: 0 0;
+        }
+
+        .radar-axis:nth-child(6) {
+            transform: rotate(60deg);
+        }
+
+        .radar-axis:nth-child(7) {
+            transform: rotate(120deg);
+        }
+
+        .radar-axis:nth-child(8) {
+            transform: rotate(180deg);
+        }
+
+        .radar-axis:nth-child(9) {
+            transform: rotate(240deg);
+        }
+
+        .radar-axis:nth-child(10) {
+            transform: rotate(300deg);
+        }
+
+        .radar-polygon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            fill: rgba(52, 152, 219, 0.3);
+            stroke: #3498db;
+            stroke-width: 2;
+        }
+
+        .radar-label {
+            position: absolute;
+            font-size: 0.8rem;
+            color: #666;
+            text-align: center;
+            width: 80px;
+        }
+
+        .radar-label:nth-child(11) {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .radar-label:nth-child(12) {
+            top: 25%;
+            right: 5%;
+        }
+
+        .radar-label:nth-child(13) {
+            bottom: 25%;
+            right: 5%;
+        }
+
+        .radar-label:nth-child(14) {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .radar-label:nth-child(15) {
+            bottom: 25%;
+            left: 5%;
+        }
+
+        .radar-label:nth-child(16) {
+            top: 25%;
+            left: 5%;
+        }
+
+        /* 雷达图评分显示样式 */
+        .radar-score {
+            position: absolute;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #3498db;
+            text-align: center;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .radar-score:nth-child(17) {
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .radar-score:nth-child(18) {
+            top: 30%;
+            right: 20%;
+        }
+
+        .radar-score:nth-child(19) {
+            bottom: 30%;
+            right: 20%;
+        }
+
+        .radar-score:nth-child(20) {
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .radar-score:nth-child(21) {
+            bottom: 30%;
+            left: 20%;
+        }
+
+        .radar-score:nth-child(22) {
+            top: 30%;
+            left: 20%;
+        }
+
+        /* 适应人群样式 */
+        .suitable-people {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .people-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .people-card h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .people-card h4 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        /* 职业发展路径样式 */
+        .career-path {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .career-timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .career-timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: #3498db;
+            transform: translateX(-50%);
+        }
+
+        .career-stage {
+            position: relative;
+            margin-bottom: 40px;
+            width: 100%;
+        }
+
+        .career-stage:nth-child(odd) .stage-content {
+            left: 0;
+            text-align: right;
+            padding-right: 60px;
+        }
+
+        .career-stage:nth-child(even) .stage-content {
+            left: 50%;
+            text-align: left;
+            padding-left: 60px;
+        }
+
+        .stage-content {
+            position: relative;
+            width: 45%;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .stage-marker {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: #3498db;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .stage-content h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .stage-content p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .nav-list {
+                flex-wrap: wrap;
+            }
+
+            .nav-item {
+                flex: 1 1 33.333%;
+            }
+
+            .skills-visualization-row {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-item {
+                flex: 1 1 50%;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .job-analysis-title h2 {
+                font-size: 1.8rem;
+            }
+
+            .career-timeline::before {
+                left: 30px;
+            }
+
+            .career-stage:nth-child(odd) .stage-content,
+            .career-stage:nth-child(even) .stage-content {
+                left: 0;
+                width: calc(100% - 80px);
+                text-align: left;
+                padding-left: 60px;
+                padding-right: 20px;
+            }
+
+            .stage-marker {
+                left: 20px;
+            }
+
+            .radar-container {
+                width: 250px;
+                height: 250px;
+            }
+
+            .radar-score {
+                font-size: 0.8rem;
+                width: 25px;
+                height: 25px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-item {
+                flex: 1 1 100%;
+            }
+
+            .dropdown {
+                width: 100%;
+                left: 0;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .job-analysis-title h2 {
+                font-size: 1.6rem;
+            }
+
+            .job-options {
+                grid-template-columns: 1fr;
+            }
+
+            .radar-container {
+                width: 220px;
+                height: 220px;
+            }
+
+            .radar-score {
+                font-size: 0.7rem;
+                width: 22px;
+                height: 22px;
+            }
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 1rem;
+        }
+
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>岗位信息综合可视化分析</h1>
+        <p class="subtitle">对您所选择的岗位信息进行综合可视化分析，你可以全面清晰的了解到该岗位的基本情况</p>
+    </header>
+
+    <div class="container">
+        <nav class="navbar">
+            <ul class="nav-list">
+                <!-- 模块1：岗位分析 -->
+                <li class="nav-item">
+                    <a href="Post_analysis.html" class="nav-link">
+                        <i class="fas fa-home"></i>岗位分析
+                    </a>
+                    <div class="dropdown">
+                        <a href="#basic-situation" class="dropdown-item"><i class="fas fa-star"></i>岗位信息</a>
+                        <a href="#skill-require" class="dropdown-item"><i class="fas fa-bullhorn"></i>技能要求</a>
+                        <a href="#visual-analysis" class="dropdown-item"><i class="fas fa-chart-line"></i>可视化分析</a>
+                        <a href="#develop-path" class="dropdown-item"><i class="fas fa-question-circle"></i>职业发展路径</a>
+                    </div>
+                </li>
+
+                <!-- 模块2：用户简历 -->
+                <li class="nav-item">
+                    <a href="Resume.html" class="nav-link">
+                        <i class="fas fa-box-open"></i>用户简历
+                    </a>
+                    <div class="dropdown">
+                        <a href="Resume_excellent.html" class="dropdown-item"><i class="fas fa-laptop"></i>模范简历选</a>
+                        <a href="Resume_mould.html" class="dropdown-item"><i class="fas fa-mobile-alt"></i>简历模板</a>
+                        <a href="Resume_test.html" class="dropdown-item"><i class="fas fa-cloud"></i>简历实训测评</a>
+                        <a href="Resume_test.html" class="dropdown-item"><i class="fas fa-cogs"></i>简历优化建议</a>
+                    </div>
+                </li>
+
+                <!-- 模块3：面试阶段-->
+                <li class="nav-item">
+                    <a href="Interview_write.html" class="nav-link">
+                        <i class="fas fa-concierge-bell"></i>笔试+面试
+                    </a>
+                    <div class="dropdown">
+                        <a href="Interview_write.html" class="dropdown-item"><i class="fas fa-palette"></i>面试宝典</a>
+                        <a href="Interview.html" class="dropdown-item"><i class="fas fa-headset"></i>ai模拟面试</a>
+                    </div>
+                </li>
+
+                <!-- 模块4：项目阶段 -->
+                <li class="nav-item">
+                    <a href="Project.html" class="nav-link">
+                        <i class="fas fa-book"></i>项目实训
+                    </a>
+                    <div class="dropdown">
+                        <a href="Project_test.html" class="dropdown-item"><i class="fas fa-file-alt"></i>技能自测题库</a>
+                        <a href="Project_video.html" class="dropdown-item"><i class="fas fa-video"></i>视频教程</a>
+                        <a href="Project_finall_test.html" class="dropdown-item"><i class="fas fa-blog"></i>项目完成度测评</a>
+                    </div>
+                </li>
+
+                <!-- 模块5：关于我们 -->
+                <li class="nav-item">
+                    <a href="Evaluation.html" class="nav-link">
+                        <i class="fas fa-users"></i>关于我们
+                    </a>
+                    <div class="dropdown">
+                        <a href="Evaluation.html" class="dropdown-item"><i class="fas fa-award"></i>评价与反馈</a>
+                        <a href="Evaluation.html#contact" class="dropdown-item"><i
+                                class="fas fa-map-marker-alt"></i>联系我们</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- 行业选择区域 -->
+        <div class="industry-selector">
+            <h3><i class="fas fa-briefcase"></i> 选择行业与岗位</h3>
+            <div class="industry-tabs">
+                <div class="industry-tab active" data-industry="tech">IT/互联网</div>
+                <div class="industry-tab" data-industry="finance">金融/银行</div>
+                <div class="industry-tab" data-industry="education">教育/培训</div>
+                <div class="industry-tab" data-industry="healthcare">医疗/健康</div>
+                <div class="industry-tab" data-industry="manufacturing">制造/工业</div>
+                <div class="industry-tab" data-industry="marketing">市场/营销</div>
+            </div>
+            <div class="job-options" id="jobOptions">
+                <!-- IT/互联网行业岗位 -->
+                <div class="job-option selected" data-job="frontend">
+                    <h4>前端开发工程师</h4>
+                    <p>负责网站和Web应用的用户界面开发</p>
+                </div>
+                <div class="job-option" data-job="backend">
+                    <h4>后端开发工程师</h4>
+                    <p>负责服务端业务逻辑和数据库开发</p>
+                </div>
+                <div class="job-option" data-job="data">
+                    <h4>数据分析师</h4>
+                    <p>负责业务数据统计分析与可视化</p>
+                </div>
+                <div class="job-option" data-job="product">
+                    <h4>产品经理</h4>
+                    <p>负责产品规划、需求分析和项目管理</p>
+                </div>
+                <div class="job-option" data-job="ai">
+                    <h4>AI算法工程师</h4>
+                    <p>负责机器学习算法研发与应用</p>
+                </div>
+                <div class="job-option" data-job="devops">
+                    <h4>运维开发工程师</h4>
+                    <p>负责系统部署、监控和自动化运维</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- 岗位分析标题 -->
+            <div class="job-analysis-title">
+                <h2><i class="fas fa-chart-bar"></i> <span id="current-job-title">前端开发工程师</span>岗位分析</h2>
+                <p>深入了解该岗位的各项指标和发展前景</p>
+            </div>
+
+            <div class="analysis-modules" id="Basic-situation">
+                <!-- 岗位基本情况 -->
+                <div class="analysis-card">
+                    <h3><i class="fas fa-info-circle"></i> 岗位基本情况</h3>
+                    <p id="job-description">前端开发工程师负责网站和Web应用的用户界面开发，实现产品UI和交互效果。</p>
+                    <ul class="analysis-list">
+                        <li><i class="fas fa-map-marker-alt"></i> <strong>城市分布：</strong><span
+                                id="job-cities">北京、上海、深圳、杭州、广州等一线和新一线城市</span></li>
+                        <li><i class="fas fa-users"></i> <strong>人才需求：</strong><span id="job-demand">高需求，市场竞争激烈</span>
+                        </li>
+                        <li><i class="fas fa-graduation-cap"></i> <strong>学历要求：</strong><span
+                                id="job-education">本科及以上学历，计算机相关专业</span></li>
+                        <li><i class="fas fa-money-bill-wave"></i> <strong>薪资范围：</strong><span
+                                id="job-salary">初级10-15K，中级15-25K，高级25-40K</span></li>
+                    </ul>
+                </div>
+
+                <!-- 工作内容 -->
+                <div class="analysis-card">
+                    <h3><i class="fas fa-tasks"></i> 主要工作内容</h3>
+                    <ul class="analysis-list" id="job-work-content">
+                        <li><i class="fas fa-check"></i> 根据产品需求，实现Web页面交互效果</li>
+                        <li><i class="fas fa-check"></i> 优化网站性能，提升用户体验</li>
+                        <li><i class="fas fa-check"></i> 与UI设计师、后端工程师协作完成项目</li>
+                        <li><i class="fas fa-check"></i> 解决不同浏览器兼容性问题</li>
+                        <li><i class="fas fa-check"></i> 参与产品需求讨论和技术方案设计</li>
+                        <li><i class="fas fa-check"></i> 编写技术文档，维护前端代码</li>
+                    </ul>
+                </div>
+
+                <!-- 适应人群 -->
+                <div class="analysis-card">
+                    <h3><i class="fas fa-user-check"></i> 岗位适应人群</h3>
+                    <ul class="analysis-list" id="job-suitable-people">
+                        <li><i class="fas fa-check"></i> 对Web技术有浓厚兴趣，喜欢创造视觉体验</li>
+                        <li><i class="fas fa-check"></i> 注重细节，有良好的审美能力</li>
+                        <li><i class="fas fa-check"></i> 逻辑思维清晰，善于解决问题</li>
+                        <li><i class="fas fa-check"></i> 具备持续学习能力，能跟上技术发展</li>
+                        <li><i class="fas fa-check"></i> 有良好的沟通能力和团队协作精神</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 技能要求与可视化分析 -->
+            <div class="analysis-section" id="skill-require">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h2>技能要求与可视化分析</h2>
+                </div>
+                <div class="section-content">
+                    <div class="skills-visualization-row">
+                        <div class="skills-section">
+                            <h3>岗位需要的基本技能</h3>
+                            <ul class="skills-list" id="job-skills">
+                                <li><i class="fas fa-check"></i> HTML/CSS/JavaScript</li>
+                                <li><i class="fas fa-check"></i> React/Vue/Angular框架</li>
+                                <li><i class="fas fa-check"></i> 响应式设计与移动端开发</li>
+                                <li><i class="fas fa-check"></i> 前端工程化与构建工具</li>
+                                <li><i class="fas fa-check"></i> 浏览器原理与性能优化</li>
+                                <li><i class="fas fa-check"></i> 版本控制工具Git</li>
+                                <li><i class="fas fa-check"></i> 团队协作与沟通能力</li>
+                            </ul>
+                        </div>
+                        <div class="visualization-section" id="visual-analysis">
+                            <h3>岗位综合能力雷达图</h3>
+                            <div class="radar-chart">
+                                <div class="radar-container">
+                                    <div class="radar-grid"></div>
+                                    <div class="radar-grid"></div>
+                                    <div class="radar-grid"></div>
+                                    <div class="radar-grid"></div>
+                                    <div class="radar-grid"></div>
+                                    <div class="radar-axis"></div>
+                                    <div class="radar-axis"></div>
+                                    <div class="radar-axis"></div>
+                                    <div class="radar-axis"></div>
+                                    <div class="radar-axis"></div>
+                                    <div class="radar-axis"></div>
+                                    <div class="radar-label">难度</div>
+                                    <div class="radar-label">薪资</div>
+                                    <div class="radar-label">城市发达度</div>
+                                    <div class="radar-label">工作强度</div>
+                                    <div class="radar-label">发展前景</div>
+                                    <div class="radar-label">竞争程度</div>
+                                    <svg class="radar-polygon" viewBox="0 0 100 100"
+                                        preserveAspectRatio="xMidYMid meet">
+                                        <polygon points="50,10 75,30 75,70 50,90 25,70 25,30" />
+                                    </svg>
+                                    <!-- 雷达图评分显示 -->
+                                    <div class="radar-score" id="score-difficulty">7.5</div>
+                                    <div class="radar-score" id="score-salary">8.2</div>
+                                    <div class="radar-score" id="score-development">8.8</div>
+                                    <div class="radar-score" id="score-intensity">7.2</div>
+                                    <div class="radar-score" id="score-competition">6.8</div>
+                                    <div class="radar-score" id="score-cities">7.9</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 岗位适应人群 -->
+            <div class="analysis-section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h2>岗位适应人群</h2>
+                </div>
+                <div class="section-content">
+                    <div class="suitable-people">
+                        <div class="people-card">
+                            <h4><i class="fas fa-graduation-cap"></i> 专业背景</h4>
+                            <ul class="skills-list" id="job-majors">
+                                <li><i class="fas fa-check"></i> 计算机科学与技术</li>
+                                <li><i class="fas fa-check"></i> 软件工程</li>
+                                <li><i class="fas fa-check"></i> 信息管理与信息系统</li>
+                                <li><i class="fas fa-check"></i> 数字媒体技术</li>
+                                <li><i class="fas fa-check"></i> 其他理工科专业(需额外学习)</li>
+                            </ul>
+                        </div>
+                        <div class="people-card">
+                            <h4><i class="fas fa-brain"></i> 能力特质</h4>
+                            <ul class="skills-list" id="job-traits">
+                                <li><i class="fas fa-check"></i> 逻辑思维能力强</li>
+                                <li><i class="fas fa-check"></i> 学习能力与适应性强</li>
+                                <li><i class="fas fa-check"></i> 注重细节与用户体验</li>
+                                <li><i class="fas fa-check"></i> 具备良好的审美能力</li>
+                                <li><i class="fas fa-check"></i> 团队协作与沟通能力</li>
+                            </ul>
+                        </div>
+                        <div class="people-card">
+                            <h4><i class="fas fa-lightbulb"></i> 兴趣倾向</h4>
+                            <ul class="skills-list" id="job-interests">
+                                <li><i class="fas fa-check"></i> 对新技术有强烈好奇心</li>
+                                <li><i class="fas fa-check"></i> 喜欢创造和实现视觉设计</li>
+                                <li><i class="fas fa-check"></i> 享受解决问题的过程</li>
+                                <li><i class="fas fa-check"></i> 能够接受快节奏工作环境</li>
+                                <li><i class="fas fa-check"></i> 愿意持续学习和自我提升</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 职业发展路径 -->
+            <div class="analysis-section" id="develop-path">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-road"></i>
+                    </div>
+                    <h2>职业发展路径</h2>
+                </div>
+                <div class="section-content">
+                    <div class="career-path">
+                        <div class="career-timeline" id="career-timeline">
+                            <div class="career-stage">
+                                <div class="stage-marker"></div>
+                                <div class="stage-content">
+                                    <h4>初级前端工程师 (0-2年)</h4>
+                                    <p>掌握HTML/CSS/JavaScript基础，能够完成简单页面开发，在指导下完成工作任务。</p>
+                                </div>
+                            </div>
+                            <div class="career-stage">
+                                <div class="stage-marker"></div>
+                                <div class="stage-content">
+                                    <h4>中级前端工程师 (2-4年)</h4>
+                                    <p>熟练掌握主流框架，能够独立完成复杂模块开发，具备一定的架构设计能力。</p>
+                                </div>
+                            </div>
+                            <div class="career-stage">
+                                <div class="stage-marker"></div>
+                                <div class="stage-content">
+                                    <h4>高级前端工程师 (4-6年)</h4>
+                                    <p>具备复杂系统架构能力，能够主导技术选型，带领团队完成项目，具备跨部门沟通能力。</p>
+                                </div>
+                            </div>
+                            <div class="career-stage">
+                                <div class="stage-marker"></div>
+                                <div class="stage-content">
+                                    <h4>前端专家/技术经理 (6-8年)</h4>
+                                    <p>在前端领域有深厚积累，能够制定技术发展方向，负责团队管理和人才培养。</p>
+                                </div>
+                            </div>
+                            <div class="career-stage">
+                                <div class="stage-marker"></div>
+                                <div class="stage-content">
+                                    <h4>技术总监/架构师 (8年以上)</h4>
+                                    <p>负责公司整体技术规划，参与业务决策，具备跨领域技术视野和战略思维。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 职场实训 | 本项目由 <span class="highlight">501全体人员</span> 共同创建</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 行业与岗位数据
+            const industryData = {
+                tech: {
+                    name: "IT/互联网",
+                    jobs: {
+                        frontend: {
+                            name: "前端开发工程师",
+                            description: "前端开发工程师负责网站和Web应用的用户界面开发，实现产品UI和交互效果。",
+                            cities: ["北京", "上海", "深圳", "杭州", "广州", "成都"],
+                            demand: "高需求，市场竞争激烈",
+                            education: "本科及以上学历，计算机相关专业",
+                            salary: "初级10-15K，中级15-25K，高级25-40K",
+                            workContent: [
+                                "根据产品需求，实现Web页面交互效果",
+                                "优化网站性能，提升用户体验",
+                                "与UI设计师、后端工程师协作完成项目",
+                                "解决不同浏览器兼容性问题",
+                                "参与产品需求讨论和技术方案设计",
+                                "编写技术文档，维护前端代码"
+                            ],
+                            skills: [
+                                "HTML/CSS/JavaScript",
+                                "React/Vue/Angular框架",
+                                "响应式设计与移动端开发",
+                                "前端工程化与构建工具",
+                                "浏览器原理与性能优化",
+                                "版本控制工具Git",
+                                "团队协作与沟通能力"
+                            ],
+                            radarValues: [7.5, 8.2, 8.8, 7.2, 6.8, 7.9],
+                            majors: [
+                                "计算机科学与技术",
+                                "软件工程",
+                                "信息管理与信息系统",
+                                "数字媒体技术",
+                                "其他理工科专业(需额外学习)"
+                            ],
+                            traits: [
+                                "逻辑思维能力强",
+                                "学习能力与适应性强",
+                                "注重细节与用户体验",
+                                "具备良好的审美能力",
+                                "团队协作与沟通能力"
+                            ],
+                            interests: [
+                                "对新技术有强烈好奇心",
+                                "喜欢创造和实现视觉设计",
+                                "享受解决问题的过程",
+                                "能够接受快节奏工作环境",
+                                "愿意持续学习和自我提升"
+                            ],
+                            careerPath: [
+                                { title: "初级前端工程师 (0-2年)", desc: "掌握HTML/CSS/JavaScript基础，能够完成简单页面开发，在指导下完成工作任务。" },
+                                { title: "中级前端工程师 (2-4年)", desc: "熟练掌握主流框架，能够独立完成复杂模块开发，具备一定的架构设计能力。" },
+                                { title: "高级前端工程师 (4-6年)", desc: "具备复杂系统架构能力，能够主导技术选型，带领团队完成项目，具备跨部门沟通能力。" },
+                                { title: "前端专家/技术经理 (6-8年)", desc: "在前端领域有深厚积累，能够制定技术发展方向，负责团队管理和人才培养。" },
+                                { title: "技术总监/架构师 (8年以上)", desc: "负责公司整体技术规划，参与业务决策，具备跨领域技术视野和战略思维。" }
+                            ]
+                        },
+                        backend: {
+                            name: "后端开发工程师",
+                            description: "后端开发工程师负责服务端业务逻辑和数据库开发，保障系统稳定性和性能。",
+                            cities: ["北京", "上海", "深圳", "杭州", "广州", "南京"],
+                            demand: "高需求，技术门槛较高",
+                            education: "本科及以上学历，计算机相关专业",
+                            salary: "初级12-18K，中级18-30K，高级30-50K",
+                            workContent: [
+                                "负责服务端业务逻辑开发",
+                                "数据库设计与优化",
+                                "API接口设计与实现",
+                                "系统性能优化与稳定性保障",
+                                "参与系统架构设计"
+                            ],
+                            skills: [
+                                "Java/Python/Go等后端语言",
+                                "Spring/Django等开发框架",
+                                "MySQL/Redis等数据库",
+                                "Linux系统与服务器部署",
+                                "分布式系统与微服务架构",
+                                "消息队列与缓存技术",
+                                "系统监控与故障排查"
+                            ],
+                            radarValues: [8.5, 8.8, 8.5, 7.8, 6.5, 7.5],
+                            majors: [
+                                "计算机科学与技术",
+                                "软件工程",
+                                "网络工程",
+                                "信息安全",
+                                "其他理工科专业(需额外学习)"
+                            ],
+                            traits: [
+                                "逻辑思维与抽象能力强",
+                                "注重系统稳定性与性能",
+                                "具备良好的问题排查能力",
+                                "能够承受压力处理线上问题",
+                                "团队协作与文档编写能力"
+                            ],
+                            interests: [
+                                "对系统架构有浓厚兴趣",
+                                "喜欢解决复杂技术问题",
+                                "关注高并发与分布式技术",
+                                "能够接受轮班值守",
+                                "愿意深入研究底层技术"
+                            ],
+                            careerPath: [
+                                { title: "初级后端工程师 (0-2年)", desc: "掌握一门后端语言，能够完成简单业务开发，在指导下完成模块开发。" },
+                                { title: "中级后端工程师 (2-4年)", desc: "熟练掌握主流框架，能够独立完成复杂业务模块，具备数据库优化能力。" },
+                                { title: "高级后端工程师 (4-6年)", desc: "具备系统架构设计能力，能够主导技术选型，解决高并发场景问题。" },
+                                { title: "后端专家/架构师 (6-8年)", desc: "在分布式系统领域有深厚积累，能够制定技术架构方案，指导团队技术方向。" },
+                                { title: "技术总监/首席架构师 (8年以上)", desc: "负责公司整体技术战略，构建数据驱动文化，参与公司业务决策。" }
+                            ]
+                        },
+                        data: {
+                            name: "数据分析师",
+                            description: "数据分析师负责业务数据统计分析与可视化，为决策提供数据支持。",
+                            cities: ["北京", "上海", "深圳", "杭州", "广州", "成都"],
+                            demand: "需求增长快，复合型人才稀缺",
+                            education: "本科及以上学历，统计学/数学/计算机相关专业",
+                            salary: "初级8-12K，中级12-20K，高级20-35K",
+                            workContent: [
+                                "数据收集与清洗处理",
+                                "业务数据统计与分析",
+                                "数据可视化与报表制作",
+                                "用户行为分析与洞察",
+                                "为业务决策提供数据支持"
+                            ],
+                            skills: [
+                                "SQL数据库查询",
+                                "Python/R数据分析",
+                                "Excel高级函数与透视表",
+                                "数据可视化工具(Tableau等)",
+                                "统计学知识与假设检验",
+                                "业务理解与沟通能力",
+                                "数据报告撰写能力"
+                            ],
+                            radarValues: [6.5, 7.2, 8.5, 6.8, 7.0, 8.2],
+                            majors: [
+                                "统计学",
+                                "数学与应用数学",
+                                "计算机科学与技术",
+                                "信息管理与信息系统",
+                                "经济学/金融学"
+                            ],
+                            traits: [
+                                "数据敏感性与逻辑思维",
+                                "细心严谨的工作态度",
+                                "业务理解与沟通能力",
+                                "具备商业洞察力",
+                                "报告撰写与表达能力"
+                            ],
+                            interests: [
+                                "对数据有强烈好奇心",
+                                "喜欢从数据中发现规律",
+                                "关注业务与数据的结合",
+                                "能够接受重复性数据处理",
+                                "愿意学习各种分析工具"
+                            ],
+                            careerPath: [
+                                { title: "初级数据分析师 (0-2年)", desc: "掌握基础数据分析工具，能够完成数据提取和简单分析，制作基础报表。" },
+                                { title: "中级数据分析师 (2-4年)", desc: "熟练掌握多种分析工具，能够独立完成专题分析，为业务提供数据洞察。" },
+                                { title: "高级数据分析师 (4-6年)", desc: "具备深度业务理解，能够构建数据分析体系，指导业务决策方向。" },
+                                { title: "数据科学家/分析经理 (6-8年)", desc: "掌握机器学习算法，能够构建预测模型，负责团队管理和分析体系建设。" },
+                                { title: "数据总监/首席数据官 (8年以上)", desc: "负责公司数据战略，构建数据驱动文化，参与公司业务决策。" }
+                            ]
+                        },
+                        product: {
+                            name: "产品经理",
+                            description: "产品经理负责产品规划、需求分析和项目管理，连接技术与业务。",
+                            cities: ["北京", "上海", "深圳", "杭州", "广州", "成都"],
+                            demand: "需求稳定，综合能力要求高",
+                            education: "本科及以上学历，专业不限但偏好理工科背景",
+                            salary: "初级10-15K，中级15-25K，高级25-40K+",
+                            workContent: [
+                                "市场调研与竞品分析",
+                                "产品需求分析与规划",
+                                "产品原型设计与PRD撰写",
+                                "协调开发测试团队推进项目",
+                                "产品上线后的数据分析与优化"
+                            ],
+                            skills: [
+                                "市场分析与用户研究",
+                                "需求分析与产品规划",
+                                "原型设计与PRD撰写",
+                                "项目管理与团队协作",
+                                "数据分析与业务理解",
+                                "沟通表达与跨部门协调",
+                                "产品思维与商业敏感度"
+                            ],
+                            radarValues: [6.8, 7.5, 9.0, 8.2, 7.5, 8.5],
+                            majors: [
+                                "计算机科学与技术",
+                                "工业设计",
+                                "市场营销",
+                                "心理学",
+                                "管理学/经济学"
+                            ],
+                            traits: [
+                                "用户思维与同理心",
+                                "逻辑思维与系统思考",
+                                "沟通协调与领导力",
+                                "创新思维与解决问题能力",
+                                "抗压能力与执行力"
+                            ],
+                            interests: [
+                                "对用户体验有强烈关注",
+                                "喜欢研究产品与商业模式",
+                                "享受从0到1的创造过程",
+                                "能够接受高强度工作压力",
+                                "愿意持续学习行业知识"
+                            ],
+                            careerPath: [
+                                { title: "产品助理/专员 (0-2年)", desc: "协助产品经理完成需求调研、文档整理等基础工作，学习产品方法论。" },
+                                { title: "产品经理 (2-4年)", desc: "独立负责产品模块，能够完成需求分析、原型设计和项目推进全流程。" },
+                                { title: "高级产品经理 (4-6年)", desc: "负责完整产品线，具备市场洞察和商业分析能力，能够制定产品战略。" },
+                                { title: "产品总监 (6-8年)", desc: "负责多条产品线管理，具备团队管理和跨部门协调能力，参与公司战略制定。" },
+                                { title: "产品副总裁/CPO (8年以上)", desc: "负责公司产品体系规划，构建产品文化，参与公司核心决策。" }
+                            ]
+                        },
+                        ai: {
+                            name: "AI算法工程师",
+                            description: "AI算法工程师负责机器学习算法研发与应用，推动人工智能技术落地。",
+                            cities: ["北京", "上海", "深圳", "杭州", "广州"],
+                            demand: "高需求，技术门槛极高",
+                            education: "硕士及以上学历，计算机/数学相关专业",
+                            salary: "初级20-30K，中级30-50K，高级50-80K+",
+                            workContent: [
+                                "机器学习算法研究与实现",
+                                "数据挖掘与特征工程",
+                                "模型训练与性能优化",
+                                "算法部署与系统集成",
+                                "技术文档撰写与专利申请"
+                            ],
+                            skills: [
+                                "Python编程与数据科学库",
+                                "机器学习/深度学习框架",
+                                "数学基础与算法理论",
+                                "大数据处理技术",
+                                "模型部署与工程化",
+                                "论文阅读与算法复现",
+                                "创新思维与问题解决"
+                            ],
+                            radarValues: [9.5, 9.2, 9.8, 8.5, 8.0, 8.8],
+                            majors: [
+                                "计算机科学与技术",
+                                "人工智能",
+                                "数学与应用数学",
+                                "统计学",
+                                "电子信息工程"
+                            ],
+                            traits: [
+                                "极强的数学与逻辑思维",
+                                "创新思维与研究能力",
+                                "耐心细致的工作态度",
+                                "快速学习与适应能力",
+                                "团队协作与沟通表达"
+                            ],
+                            interests: [
+                                "对人工智能技术有浓厚兴趣",
+                                "喜欢研究算法和数学模型",
+                                "享受解决复杂问题的过程",
+                                "能够接受高强度研究工作",
+                                "愿意持续跟踪学术前沿"
+                            ],
+                            careerPath: [
+                                { title: "初级算法工程师 (0-2年)", desc: "掌握基础机器学习算法，能够实现经典模型，在指导下完成算法开发。" },
+                                { title: "中级算法工程师 (2-4年)", desc: "熟练掌握深度学习技术，能够独立完成算法研发，具备模型优化能力。" },
+                                { title: "高级算法工程师 (4-6年)", desc: "具备算法创新能力，能够主导技术方向，解决复杂业务问题。" },
+                                { title: "算法专家/技术经理 (6-8年)", desc: "在特定领域有深厚积累，能够制定技术路线，负责团队技术指导。" },
+                                { title: "首席科学家/技术总监 (8年以上)", desc: "负责公司技术战略，引领技术创新，参与核心技术决策。" }
+                            ]
+                        },
+                        devops: {
+                            name: "运维开发工程师",
+                            description: "运维开发工程师负责系统部署、监控和自动化运维，保障系统稳定运行。",
+                            cities: ["北京", "上海", "深圳", "杭州", "广州"],
+                            demand: "需求稳定增长，复合型人才",
+                            education: "本科及以上学历，计算机相关专业",
+                            salary: "初级10-16K，中级16-28K，高级28-45K",
+                            workContent: [
+                                "系统部署与配置管理",
+                                "监控告警与故障处理",
+                                "自动化运维工具开发",
+                                "性能优化与容量规划",
+                                "安全防护与灾备方案"
+                            ],
+                            skills: [
+                                "Linux系统与Shell脚本",
+                                "容器技术(Docker/K8s)",
+                                "自动化运维工具(Ansible等)",
+                                "监控系统(Prometheus等)",
+                                "CI/CD流水线构建",
+                                "网络与安全知识",
+                                "编程能力(Python/Go)"
+                            ],
+                            radarValues: [7.8, 7.5, 8.2, 7.0, 6.2, 7.8],
+                            majors: [
+                                "计算机科学与技术",
+                                "网络工程",
+                                "信息安全",
+                                "软件工程",
+                                "电子信息工程"
+                            ],
+                            traits: [
+                                "系统思维与全局观念",
+                                "应急响应与问题解决",
+                                "细心严谨的工作态度",
+                                "自动化思维与效率意识",
+                                "团队协作与沟通能力"
+                            ],
+                            interests: [
+                                "对系统架构有浓厚兴趣",
+                                "喜欢自动化与效率提升",
+                                "能够接受轮班值守工作",
+                                "关注新技术与最佳实践",
+                                "愿意学习各种运维工具"
+                            ],
+                            careerPath: [
+                                { title: "初级运维工程师 (0-2年)", desc: "掌握基础运维技能，能够完成日常运维工作，在指导下处理故障。" },
+                                { title: "中级运维工程师 (2-4年)", desc: "熟练掌握运维工具链，能够独立处理复杂故障，具备自动化开发能力。" },
+                                { title: "高级运维工程师 (4-6年)", desc: "具备系统架构能力，能够设计运维体系，主导自动化平台建设。" },
+                                { title: "运维专家/SRE经理 (6-8年)", desc: "在运维领域有深厚积累，能够制定运维战略，负责团队管理。" },
+                                { title: "运维总监/技术总监 (8年以上)", desc: "负责公司基础设施规划，构建稳定可靠的运维体系。" }
+                            ]
+                        }
+                    }
+                },
+                finance: {
+                    name: "金融/银行",
+                    jobs: {
+                        financial_analyst: {
+                            name: "金融分析师",
+                            description: "金融分析师负责金融市场分析、投资研究和风险评估。",
+                            cities: ["北京", "上海", "深圳", "广州", "杭州"],
+                            demand: "需求稳定，专业要求高",
+                            education: "本科及以上学历，金融/经济相关专业",
+                            salary: "初级8-15K，中级15-25K，高级25-40K+",
+                            workContent: [
+                                "金融市场数据收集与分析",
+                                "投资组合分析与风险评估",
+                                "财务模型构建与估值分析",
+                                "行业研究与公司分析",
+                                "投资建议报告撰写"
+                            ],
+                            skills: [
+                                "财务分析与估值建模",
+                                "金融市场知识",
+                                "Excel高级函数与数据分析",
+                                "金融数据库使用",
+                                "风险管理知识",
+                                "报告撰写与表达能力",
+                                "英语阅读与沟通能力"
+                            ],
+                            radarValues: [7.2, 8.5, 8.0, 7.8, 7.5, 8.8],
+                            majors: [
+                                "金融学",
+                                "经济学",
+                                "会计学",
+                                "统计学",
+                                "工商管理"
+                            ],
+                            traits: [
+                                "数据敏感性与分析能力",
+                                "风险意识与谨慎态度",
+                                "逻辑思维与判断力",
+                                "抗压能力与应变能力",
+                                "沟通表达与团队协作"
+                            ],
+                            interests: [
+                                "对金融市场有浓厚兴趣",
+                                "喜欢数据分析和研究",
+                                "能够接受高强度工作",
+                                "关注宏观经济动态",
+                                "愿意持续学习金融知识"
+                            ],
+                            careerPath: [
+                                { title: "初级分析师 (0-2年)", desc: "掌握基础分析方法，协助完成研究报告，学习行业知识。" },
+                                { title: "中级分析师 (2-4年)", desc: "能够独立完成分析报告，具备一定的投资判断能力。" },
+                                { title: "高级分析师 (4-6年)", desc: "具备深度研究能力，能够提供专业投资建议，指导团队工作。" },
+                                { title: "首席分析师/研究总监 (6-8年)", desc: "负责研究团队管理，制定研究框架，参与投资决策。" },
+                                { title: "投资总监/合伙人 (8年以上)", desc: "负责投资策略制定，管理投资组合，参与公司战略决策。" }
+                            ]
+                        },
+                        risk_management: {
+                            name: "风险管理师",
+                            description: "风险管理师负责识别、评估和控制金融机构的各种风险。",
+                            cities: ["北京", "上海", "深圳", "广州"],
+                            demand: "需求增长，监管要求严格",
+                            education: "本科及以上学历，金融/数学/统计相关专业",
+                            salary: "初级10-16K，中级16-28K，高级28-45K",
+                            workContent: [
+                                "风险识别与评估",
+                                "风险模型开发与验证",
+                                "风险监控与报告",
+                                "合规检查与内部控制",
+                                "风险政策制定与执行"
+                            ],
+                            skills: [
+                                "风险管理理论与方法",
+                                "统计分析与建模",
+                                "金融产品知识",
+                                "监管政策理解",
+                                "数据分析工具",
+                                "报告撰写能力",
+                                "沟通协调能力"
+                            ],
+                            radarValues: [7.5, 7.8, 7.2, 6.5, 6.8, 8.5],
+                            majors: [
+                                "金融学",
+                                "数学与应用数学",
+                                "统计学",
+                                "经济学",
+                                "风险管理与保险"
+                            ],
+                            traits: [
+                                "严谨细致的工作态度",
+                                "风险意识与预见性",
+                                "数据分析能力",
+                                "合规意识与原则性",
+                                "沟通协调能力"
+                            ],
+                            interests: [
+                                "对风险控制有浓厚兴趣",
+                                "喜欢数据分析和建模",
+                                "能够接受重复性工作",
+                                "关注监管政策变化",
+                                "愿意学习风险管理知识"
+                            ],
+                            careerPath: [
+                                { title: "风险专员 (0-2年)", desc: "掌握基础风险识别方法，协助完成风险评估，学习风险管理流程。" },
+                                { title: "风险管理师 (2-4年)", desc: "能够独立完成风险评估，具备风险模型开发能力。" },
+                                { title: "高级风险管理师 (4-6年)", desc: "具备复杂风险识别能力，能够制定风险控制策略。" },
+                                { title: "风险经理 (6-8年)", desc: "负责风险管理团队，制定风险管理框架，参与公司风险决策。" },
+                                { title: "首席风险官 (8年以上)", desc: "负责公司全面风险管理，构建风险文化，参与公司战略决策。" }
+                            ]
+                        }
+                    }
+                },
+                education: {
+                    name: "教育/培训",
+                    jobs: {
+                        teacher: {
+                            name: "教师/讲师",
+                            description: "教师负责知识传授、学生培养和课程开发。",
+                            cities: ["全国各城市"],
+                            demand: "稳定需求，地域分布广",
+                            education: "本科及以上学历，相关专业背景",
+                            salary: "初级5-10K，中级10-20K，高级20-35K",
+                            workContent: [
+                                "课程教学与知识传授",
+                                "学生辅导与答疑",
+                                "教学材料准备与课程开发",
+                                "学生评估与成绩分析",
+                                "教学研究与改进"
+                            ],
+                            skills: [
+                                "专业知识与教学能力",
+                                "沟通表达与演讲技巧",
+                                "课程设计与开发",
+                                "学生管理与心理辅导",
+                                "多媒体教学工具",
+                                "教育心理学知识",
+                                "团队协作能力"
+                            ],
+                            radarValues: [6.0, 6.5, 7.8, 6.2, 6.5, 8.0],
+                            majors: [
+                                "师范类专业",
+                                "相关学科专业",
+                                "教育学",
+                                "心理学",
+                                "语言学"
+                            ],
+                            traits: [
+                                "耐心细致的工作态度",
+                                "沟通表达能力强",
+                                "责任心与爱心",
+                                "学习能力与适应性",
+                                "团队协作精神"
+                            ],
+                            interests: [
+                                "对教育事业有热情",
+                                "喜欢与人沟通交流",
+                                "享受知识传授过程",
+                                "能够接受重复性教学",
+                                "愿意持续学习提升"
+                            ],
+                            careerPath: [
+                                { title: "实习教师 (0-1年)", desc: "掌握基础教学方法，协助完成教学任务，学习教育理论。" },
+                                { title: "初级教师 (1-3年)", desc: "能够独立完成教学任务，具备课程开发能力。" },
+                                { title: "中级教师 (3-6年)", desc: "具备丰富教学经验，能够指导新教师，参与教学研究。" },
+                                { title: "高级教师/教研组长 (6-10年)", desc: "负责教研团队，制定教学计划，参与学校管理。" },
+                                { title: "教务主任/校长 (10年以上)", desc: "负责学校整体运营，制定教育战略，参与教育政策制定。" }
+                            ]
+                        }
+                    }
+                }
+                // 其他行业数据可以继续添加...
+            };
+
+            // 行业选择功能
+            const industryTabs = document.querySelectorAll('.industry-tab');
+            const jobOptionsContainer = document.getElementById('jobOptions');
+            let currentIndustry = 'tech';
+
+            industryTabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    // 移除其他选项的选中状态
+                    industryTabs.forEach(t => t.classList.remove('active'));
+                    // 添加当前选项的选中状态
+                    this.classList.add('active');
+
+                    // 获取选中的行业
+                    currentIndustry = this.dataset.industry;
+                    // 更新岗位选项
+                    updateJobOptions(currentIndustry);
+                });
+            });
+
+            // 更新岗位选项
+            function updateJobOptions(industryKey) {
+                const industry = industryData[industryKey];
+                if (!industry) return;
+
+                // 清空现有岗位选项
+                jobOptionsContainer.innerHTML = '';
+
+                // 添加新岗位选项
+                Object.keys(industry.jobs).forEach((jobKey, index) => {
+                    const job = industry.jobs[jobKey];
+                    const jobOption = document.createElement('div');
+                    jobOption.className = `job-option ${index === 0 ? 'selected' : ''}`;
+                    jobOption.dataset.job = jobKey;
+                    jobOption.innerHTML = `
+                        <h4>${job.name}</h4>
+                        <p>${job.description.substring(0, 30)}...</p>
+                    `;
+                    jobOption.addEventListener('click', function () {
+                        // 移除其他选项的选中状态
+                        document.querySelectorAll('.job-option').forEach(opt => opt.classList.remove('selected'));
+                        // 添加当前选项的选中状态
+                        this.classList.add('selected');
+                        // 更新岗位分析
+                        updateJobAnalysis(industryKey, jobKey);
+                    });
+                    jobOptionsContainer.appendChild(jobOption);
+                });
+
+                // 默认选择第一个岗位
+                const firstJobKey = Object.keys(industry.jobs)[0];
+                updateJobAnalysis(industryKey, firstJobKey);
+            }
+
+            // 岗位选择功能
+            function setupJobOptions() {
+                const jobOptions = document.querySelectorAll('.job-option');
+
+                jobOptions.forEach(option => {
+                    option.addEventListener('click', function () {
+                        // 移除其他选项的选中状态
+                        jobOptions.forEach(opt => opt.classList.remove('selected'));
+                        // 添加当前选项的选中状态
+                        this.classList.add('selected');
+
+                        // 获取选中的岗位
+                        const selectedJob = this.dataset.job;
+                        // 更新页面内容
+                        updateJobAnalysis(currentIndustry, selectedJob);
+                    });
+                });
+            }
+
+            // 更新岗位分析内容
+            function updateJobAnalysis(industryKey, jobKey) {
+                const industry = industryData[industryKey];
+                if (!industry || !industry.jobs[jobKey]) return;
+
+                const job = industry.jobs[jobKey];
+
+                // 更新岗位分析标题
+                document.getElementById('current-job-title').textContent = job.name;
+
+                // 更新岗位基本情况
+                document.getElementById('job-description').textContent = job.description;
+                document.getElementById('job-cities').textContent = job.cities.join('、');
+                document.getElementById('job-demand').textContent = job.demand;
+                document.getElementById('job-education').textContent = job.education;
+                document.getElementById('job-salary').textContent = job.salary;
+
+                // 更新工作内容
+                const workContentList = document.getElementById('job-work-content');
+                workContentList.innerHTML = '';
+                job.workContent.forEach(content => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-check"></i> ${content}`;
+                    workContentList.appendChild(li);
+                });
+
+                // 更新适应人群
+                const suitablePeopleList = document.getElementById('job-suitable-people');
+                suitablePeopleList.innerHTML = '';
+                job.traits.forEach(trait => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-check"></i> ${trait}`;
+                    suitablePeopleList.appendChild(li);
+                });
+
+                // 更新技能要求
+                const skillsList = document.getElementById('job-skills');
+                skillsList.innerHTML = '';
+                job.skills.forEach(skill => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-check"></i> ${skill}`;
+                    skillsList.appendChild(li);
+                });
+
+                // 更新专业背景
+                const majorsList = document.getElementById('job-majors');
+                majorsList.innerHTML = '';
+                job.majors.forEach(major => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-check"></i> ${major}`;
+                    majorsList.appendChild(li);
+                });
+
+                // 更新能力特质
+                const traitsList = document.getElementById('job-traits');
+                traitsList.innerHTML = '';
+                job.traits.forEach(trait => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-check"></i> ${trait}`;
+                    traitsList.appendChild(li);
+                });
+
+                // 更新兴趣倾向
+                const interestsList = document.getElementById('job-interests');
+                interestsList.innerHTML = '';
+                job.interests.forEach(interest => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-check"></i> ${interest}`;
+                    interestsList.appendChild(li);
+                });
+
+                // 更新职业发展路径
+                const careerTimeline = document.getElementById('career-timeline');
+                careerTimeline.innerHTML = '';
+                job.careerPath.forEach((stage, index) => {
+                    const careerStage = document.createElement('div');
+                    careerStage.className = 'career-stage';
+                    careerStage.innerHTML = `
+                        <div class="stage-marker"></div>
+                        <div class="stage-content">
+                            <h4>${stage.title}</h4>
+                            <p>${stage.desc}</p>
+                        </div>
+                    `;
+                    careerTimeline.appendChild(careerStage);
+                });
+
+                // 更新雷达图
+                updateRadarChart(job.radarValues);
+            }
+
+            // 更新雷达图
+            function updateRadarChart(values) {
+                // 更新雷达图多边形
+                const polygon = document.querySelector('.radar-polygon polygon');
+                const points = [
+                    `50,${50 - values[0] * 4}`, // 难度
+                    `${50 + values[1] * 3.5},${50 - values[1] * 2}`, // 薪资
+                    `${50 + values[2] * 3.5},${50 + values[2] * 2}`, // 发展前景
+                    `50,${50 + values[3] * 4}`, // 工作强度
+                    `${50 - values[4] * 3.5},${50 + values[4] * 2}`, // 竞争程度
+                    `${50 - values[5] * 3.5},${50 - values[5] * 2}`  // 城市分布
+                ].join(' ');
+
+                polygon.setAttribute('points', points);
+
+                // 更新雷达图评分显示
+                document.getElementById('score-difficulty').textContent = values[0].toFixed(1);
+                document.getElementById('score-salary').textContent = values[1].toFixed(1);
+                document.getElementById('score-development').textContent = values[2].toFixed(1);
+                document.getElementById('score-intensity').textContent = values[3].toFixed(1);
+                document.getElementById('score-competition').textContent = values[4].toFixed(1);
+                document.getElementById('score-cities').textContent = values[5].toFixed(1);
+            }
+
+            // 初始化页面
+            setupJobOptions();
+            updateJobAnalysis('tech', 'frontend');
+
+            // 导航栏交互效果
+            const navItems = document.querySelectorAll('.nav-item');
+
+            navItems.forEach(item => {
+                item.addEventListener('mouseenter', function () {
+                    this.style.backgroundColor = '#34495e';
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    this.style.backgroundColor = '';
+                });
+            });
+
+            // 移动设备下拉菜单
+            if (window.innerWidth <= 768) {
+                navItems.forEach(item => {
+                    item.addEventListener('click', function (e) {
+                        if (this.querySelector('.dropdown').style.display === 'block') {
+                            this.querySelector('.dropdown').style.display = 'none';
+                        } else {
+                            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                                dropdown.style.display = 'none';
+                            });
+                            this.querySelector('.dropdown').style.display = 'block';
+                        }
+                        e.preventDefault();
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>优秀简历展示</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(90deg, #2c3e50, #4a6491);
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: #2c3e50;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 18px 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: #34495e;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f1f1f1;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            color: #3498db;
+            padding-left: 25px;
+        }
+
+        .dropdown-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 内容区域样式 */
+        .content {
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        .content h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        /* 筛选器样式 */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .filter-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+
+        .filter-group select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        /* 优秀简历盒子样式 */
+        .resumes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .resume-box {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #eaeaea;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+        }
+
+        .resume-box:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .job-info {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .job-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .job-title i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .job-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .job-tag {
+            background: #e1f0fa;
+            color: #3498db;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .resume-preview {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f7fa;
+            position: relative;
+            overflow: hidden;
+            min-height: 250px;
+        }
+
+        .resume-image {
+            max-width: 100%;
+            max-height: 220px;
+            border: 1px solid #eaeaea;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .resume-box:hover .resume-image {
+            transform: scale(1.03);
+        }
+
+        .resume-actions {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            background: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn i {
+            margin-right: 6px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #3498db;
+            border: 1px solid #3498db;
+        }
+
+        .btn-outline:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        /* 收藏按钮样式 */
+        .favorite-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .favorite-btn:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .favorite-btn i {
+            color: #bdc3c7;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .favorite-btn.active i {
+            color: #e74c3c;
+        }
+
+        .favorite-btn:hover i {
+            color: #e74c3c;
+        }
+
+        /* 评分标签 */
+        .rating-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(52, 152, 219, 0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .nav-list {
+                flex-wrap: wrap;
+            }
+
+            .nav-item {
+                flex: 1 1 33.333%;
+            }
+
+            .resumes-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-item {
+                flex: 1 1 50%;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .resumes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-item {
+                flex: 1 1 100%;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .resume-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 1rem;
+        }
+
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #bdc3c7;
+        }
+
+        /* 个人中心样式 */
+        .profile-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin-right: 20px;
+        }
+
+        .profile-info h3 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            color: #7f8c8d;
+        }
+
+        .favorites-section {
+            margin-top: 40px;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>优秀简历展示</h1>
+        <p class="subtitle">精选各行业优秀求职简历，为您提供参考和灵感</p>
+    </header>
+
+    <div class="container">
+        <nav class="navbar">
+            <ul class="nav-list">
+                <!-- <li class="nav-item">
+                    <a href="primary.html" class="nav-link">
+                        <i class="fas fa-home"></i>首页
+                    </a>
+                </li> -->
+                <li class="nav-item">
+                    <a href="Resume.html" class="nav-link">
+                        <i class="fas fa-home"></i>用户简历
+                    </a>
+                    <div class="dropdown">
+                        <a href="Resume_excellent.html" class="dropdown-item"><i class="fas fa-star"></i>模范简历选</a>
+                        <a href="Resume_mould.html" class="dropdown-item"><i class="fas fa-bullhorn"></i>简历模板</a>
+                        <a href="Resume_test.html" class="dropdown-item"><i class="fas fa-chart-line"></i>简历测评</a>
+                        <a href="Resume_test.html" class="dropdown-item"><i
+                                class="fas fa-question-circle"></i>简历优化建议</a>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a href="Resume_excellent.html" class="nav-link">
+                        <i class="fas fa-star"></i>优秀简历
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" id="profile-link">
+                        <i class="fas fa-user-circle"></i>我的收藏
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- 优秀简历页面 -->
+        <div class="content" id="resumes-page">
+            <h2>精选优秀简历--汲取成功者的智慧</h2>
+            <p>
+                还在闭门造车？是时候看看“赢在起跑线”的简历长什么样了！来这里，不是抄袭，是学习如何“优秀”。<br>
+                真实案例库： 汇集来自互联网、金融、科技、快消等各行业顶尖公司的成功简历，每一份都经过实战检验。<br>
+                精准筛选： 按行业、职位、工作年限精准查找，快速找到与你背景最匹配的参考范本。<br>
+                启发思路： 学习他人如何将平凡的经历，包装成亮眼的成就；如何用专业术语，展现核心价值。<br>
+            </p>
+
+            <!-- 筛选器 -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="industry-filter"><i class="fas fa-industry"></i> 行业</label>
+                    <select id="industry-filter">
+                        <option value="all">所有行业</option>
+                        <option value="it">IT/互联网</option>
+                        <option value="finance">金融/银行</option>
+                        <option value="education">教育/培训</option>
+                        <option value="medical">医疗/健康</option>
+                        <option value="marketing">市场/销售</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="experience-filter"><i class="fas fa-chart-line"></i> 经验级别</label>
+                    <select id="experience-filter">
+                        <option value="all">所有级别</option>
+                        <option value="entry">初级(0-2年)</option>
+                        <option value="mid">中级(3-5年)</option>
+                        <option value="senior">高级(5年以上)</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="rating-filter"><i class="fas fa-star"></i> 评分</label>
+                    <select id="rating-filter">
+                        <option value="all">所有评分</option>
+                        <option value="4.5">4.5分以上</option>
+                        <option value="4.0">4.0分以上</option>
+                        <option value="3.5">3.5分以上</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sort-filter"><i class="fas fa-sort"></i> 排序方式</label>
+                    <select id="sort-filter">
+                        <option value="newest">最新添加</option>
+                        <option value="popular">最受欢迎</option>
+                        <option value="rating">评分最高</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 优秀简历盒子网格 -->
+            <div class="resumes-grid" id="resumes-grid">
+                <!-- 优秀简历盒子将通过JavaScript动态生成 -->
+            </div>
+
+            <!-- 空状态 -->
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <i class="fas fa-file-search"></i>
+                <h3>未找到匹配的简历</h3>
+                <p>请尝试调整筛选条件或浏览其他分类</p>
+            </div>
+        </div>
+
+        <!-- 个人中心页面 -->
+        <div class="content" id="profile-page" style="display: none;">
+            <h2>个人中心</h2>
+
+            <div class="profile-section">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="profile-info">
+                        <h3>求职者用户</h3>
+                        <p>会员等级: 普通会员</p>
+                        <p>已收藏简历: <span id="favorites-count">0</span> 份</p>
+                    </div>
+                </div>
+
+                <div class="favorites-section">
+                    <h3 class="section-title"><i class="fas fa-heart"></i> 我的收藏</h3>
+
+                    <div class="resumes-grid" id="favorites-grid">
+                        <!-- 收藏的优秀简历将通过JavaScript动态生成 -->
+                    </div>
+
+                    <div class="empty-state" id="favorites-empty" style="display: none;">
+                        <i class="fas fa-heart"></i>
+                        <h3>暂无收藏的简历</h3>
+                        <p>去优秀简历页面收藏您喜欢的简历吧</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2023 优秀简历展示 | 使用 <span class="highlight">HTML5, CSS3 和 JavaScript</span> 创建</p>
+    </footer>
+
+    <script>
+
+        // 优秀简历数据
+        const resumeData = [
+            {
+                id: 1,
+                jobTitle: "前端开发工程师",
+                company: "某知名科技公司",
+                industry: "it",
+                experience: "mid",
+                salary: "18-25K",
+                location: "北京",
+                rating: 4.8,
+                views: 2456,
+                tags: ["React", "Vue", "JavaScript", "性能优化"],
+                image: "frontend-resume.jpg",
+                description: "这份简历展示了清晰的技术栈和项目经验，排版专业，重点突出",
+                isFavorite: false
+            },
+            {
+                id: 2,
+                jobTitle: "产品经理",
+                company: "某互联网大厂",
+                industry: "it",
+                experience: "senior",
+                salary: "25-35K",
+                location: "上海",
+                rating: 4.6,
+                views: 1987,
+                tags: ["需求分析", "产品设计", "项目管理", "用户研究"],
+                image: "pm-resume.jpg",
+                description: "逻辑清晰，项目经验丰富，展示了完整的产品思维",
+                isFavorite: false
+            },
+            {
+                id: 3,
+                jobTitle: "市场营销专员",
+                company: "某消费品公司",
+                industry: "marketing",
+                experience: "entry",
+                salary: "8-12K",
+                location: "广州",
+                rating: 4.3,
+                views: 1256,
+                tags: ["市场策划", "品牌推广", "社交媒体", "活动执行"],
+                image: "marketing-resume.jpg",
+                description: "创意十足，数据驱动，展示了出色的营销思维",
+                isFavorite: false
+            },
+            {
+                id: 4,
+                jobTitle: "财务分析师",
+                company: "某金融机构",
+                industry: "finance",
+                experience: "mid",
+                salary: "20-30K",
+                location: "深圳",
+                rating: 4.7,
+                views: 1832,
+                tags: ["财务分析", "数据分析", "投资评估", "风险管理"],
+                image: "finance-resume.jpg",
+                description: "专业严谨，数据详实，展示了扎实的财务功底",
+                isFavorite: false
+            },
+            {
+                id: 5,
+                jobTitle: "UI/UX设计师",
+                company: "某设计工作室",
+                industry: "it",
+                experience: "mid",
+                salary: "15-25K",
+                location: "杭州",
+                rating: 4.9,
+                views: 2103,
+                tags: ["用户体验", "界面设计", "原型设计", "用户研究"],
+                image: "uiux-resume.jpg",
+                description: "设计感强，作品集丰富，用户体验思维突出",
+                isFavorite: false
+            },
+            {
+                id: 6,
+                jobTitle: "人力资源经理",
+                company: "某跨国企业",
+                industry: "other",
+                experience: "senior",
+                salary: "20-35K",
+                location: "北京",
+                rating: 4.5,
+                views: 1454,
+                tags: ["招聘", "员工关系", "绩效管理", "培训发展"],
+                image: "hr-resume.jpg",
+                description: "专业全面，案例丰富，展示了出色的人力资源管理能力",
+                isFavorite: false
+            },
+            {
+                id: 7,
+                jobTitle: "数据分析师",
+                company: "某电商平台",
+                industry: "it",
+                experience: "mid",
+                salary: "18-28K",
+                location: "上海",
+                rating: 4.8,
+                views: 1921,
+                tags: ["Python", "SQL", "数据可视化", "机器学习"],
+                image: "data-resume.jpg",
+                description: "技术扎实，分析深入，数据驱动决策能力突出",
+                isFavorite: false
+            },
+            {
+                id: 8,
+                jobTitle: "内容运营",
+                company: "某新媒体公司",
+                industry: "marketing",
+                experience: "entry",
+                salary: "8-15K",
+                location: "成都",
+                rating: 4.4,
+                views: 1323,
+                tags: ["内容策划", "文案撰写", "社群运营", "数据分析"],
+                image: "content-resume.jpg",
+                description: "创意丰富，文笔优秀，展示了出色的内容运营能力",
+                isFavorite: false
+            }
+        ];
+
+        // 行业映射
+        const industryMap = {
+            'it': 'IT/互联网',
+            'finance': '金融/银行',
+            'education': '教育/培训',
+            'medical': '医疗/健康',
+            'marketing': '市场/销售',
+            'other': '其他行业'
+        };
+
+        // 经验级别映射
+        const experienceMap = {
+            'entry': '初级(0-2年)',
+            'mid': '中级(3-5年)',
+            'senior': '高级(5年以上)'
+        };
+
+        // 用户收藏数据
+        let userFavorites = JSON.parse(localStorage.getItem('userResumeFavorites')) || [];
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const resumesGrid = document.getElementById('resumes-grid');
+            const favoritesGrid = document.getElementById('favorites-grid');
+            const emptyState = document.getElementById('empty-state');
+            const favoritesEmpty = document.getElementById('favorites-empty');
+            const profileLink = document.getElementById('profile-link');
+            const resumesPage = document.getElementById('resumes-page');
+            const profilePage = document.getElementById('profile-page');
+
+            // 导航栏交互效果
+            navItems.forEach(item => {
+                item.addEventListener('mouseenter', function () {
+                    this.style.backgroundColor = '#34495e';
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    this.style.backgroundColor = '';
+                });
+            });
+
+            // 初始化收藏状态
+            initFavorites();
+
+            // 初始渲染简历
+            renderResumes(resumeData);
+            renderFavorites();
+
+            // 筛选器事件监听
+            const industryFilter = document.getElementById('industry-filter');
+            const experienceFilter = document.getElementById('experience-filter');
+            const ratingFilter = document.getElementById('rating-filter');
+            const sortFilter = document.getElementById('sort-filter');
+
+            [industryFilter, experienceFilter, ratingFilter, sortFilter].forEach(filter => {
+                filter.addEventListener('change', filterResumes);
+            });
+
+            // 个人中心链接点击事件
+            profileLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                resumesPage.style.display = 'none';
+                profilePage.style.display = 'block';
+                renderFavorites();
+            });
+
+            // 导航栏其他链接点击事件（返回简历页面）
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (!link.id) {
+                    link.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        resumesPage.style.display = 'block';
+                        profilePage.style.display = 'none';
+                    });
+                }
+            });
+
+            // 初始化收藏状态
+            function initFavorites() {
+                resumeData.forEach(resume => {
+                    resume.isFavorite = userFavorites.includes(resume.id);
+                });
+            }
+
+            // 筛选简历函数
+            function filterResumes() {
+                const industryValue = industryFilter.value;
+                const experienceValue = experienceFilter.value;
+                const ratingValue = ratingFilter.value;
+                const sortValue = sortFilter.value;
+
+                let filteredResumes = [...resumeData];
+
+                // 行业筛选
+                if (industryValue !== 'all') {
+                    filteredResumes = filteredResumes.filter(resume => resume.industry === industryValue);
+                }
+
+                // 经验级别筛选
+                if (experienceValue !== 'all') {
+                    filteredResumes = filteredResumes.filter(resume => resume.experience === experienceValue);
+                }
+
+                // 评分筛选
+                if (ratingValue !== 'all') {
+                    const minRating = parseFloat(ratingValue);
+                    filteredResumes = filteredResumes.filter(resume => resume.rating >= minRating);
+                }
+
+                // 排序
+                if (sortValue === 'popular') {
+                    filteredResumes.sort((a, b) => b.views - a.views);
+                } else if (sortValue === 'rating') {
+                    filteredResumes.sort((a, b) => b.rating - a.rating);
+                } else {
+                    // 默认按ID排序（最新）
+                    filteredResumes.sort((a, b) => b.id - a.id);
+                }
+
+                renderResumes(filteredResumes);
+            }
+
+            // 渲染简历函数
+            function renderResumes(resumes) {
+                resumesGrid.innerHTML = '';
+
+                if (resumes.length === 0) {
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                emptyState.style.display = 'none';
+
+                resumes.forEach(resume => {
+                    const resumeBox = document.createElement('div');
+                    resumeBox.className = 'resume-box';
+
+                    resumeBox.innerHTML = `
+                        <button class="favorite-btn ${resume.isFavorite ? 'active' : ''}" data-id="${resume.id}">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        <div class="rating-tag">${resume.rating}分</div>
+                        <div class="job-info">
+                            <h3 class="job-title"><i class="fas fa-briefcase"></i>${resume.jobTitle}</h3>
+                            <p>${resume.company} · ${resume.location} · ${resume.salary}</p>
+                            <p style="color: #666; font-size: 0.9rem; margin-top: 5px;">${resume.description}</p>
+                            <div class="job-meta">
+                                <span class="job-tag">${industryMap[resume.industry]}</span>
+                                <span class="job-tag">${experienceMap[resume.experience]}</span>
+                                <span class="job-tag">${resume.views}次浏览</span>
+                            </div>
+                        </div>
+                        <div class="resume-preview">
+                            <img src="https://via.placeholder.com/250x350/3498db/ffffff?text=${encodeURIComponent(resume.jobTitle + '简历')}" alt="${resume.jobTitle}优秀简历" class="resume-image">
+                        </div>
+                        <div class="resume-actions">
+                            <button class="btn btn-outline view-btn" data-id="${resume.id}">
+                                <i class="fas fa-eye"></i> 查看详情
+                            </button>
+                            <button class="btn download-btn" data-id="${resume.id}">
+                                <i class="fas fa-download"></i> 下载参考
+                            </button>
+                        </div>
+                    `;
+
+                    resumesGrid.appendChild(resumeBox);
+                });
+
+                // 添加按钮事件监听
+                document.querySelectorAll('.view-btn').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const resumeId = this.getAttribute('data-id');
+                        viewResume(resumeId);
+                    });
+                });
+
+                document.querySelectorAll('.download-btn').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const resumeId = this.getAttribute('data-id');
+                        downloadResume(resumeId);
+                    });
+                });
+
+                // 添加收藏按钮事件监听
+                document.querySelectorAll('.favorite-btn').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const resumeId = parseInt(this.getAttribute('data-id'));
+                        toggleFavorite(resumeId, this);
+                    });
+                });
+            }
+
+
+            // 渲染收藏的简历
+            function renderFavorites() {
+                favoritesGrid.innerHTML = '';
+                const favorites = resumeData.filter(resume => resume.isFavorite);
+
+                // 更新收藏数量
+                document.getElementById('favorites-count').textContent = favorites.length;
+
+                if (favorites.length === 0) {
+                    favoritesEmpty.style.display = 'block';
+                    return;
+                }
+
+                favoritesEmpty.style.display = 'none';
+
+                favorites.forEach(resume => {
+                    const resumeBox = document.createElement('div');
+                    resumeBox.className = 'resume-box';
+
+                    resumeBox.innerHTML = `
+                        <button class="favorite-btn active" data-id="${resume.id}">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        <div class="rating-tag">${resume.rating}分</div>
+                        <div class="job-info">
+                            <h3 class="job-title"><i class="fas fa-briefcase"></i>${resume.jobTitle}</h3>
+                            <p>${resume.company} · ${resume.location} · ${resume.salary}</p>
+                            <p style="color: #666; font-size: 0.9rem; margin-top: 5px;">${resume.description}</p>
+                            <div class="job-meta">
+                                <span class="job-tag">${industryMap[resume.industry]}</span>
+                                <span class="job-tag">${experienceMap[resume.experience]}</span>
+                                <span class="job-tag">${resume.views}次浏览</span>
+                            </div>
+                        </div>
+                        <div class="resume-preview">
+                            <img src="https://via.placeholder.com/250x350/3498db/ffffff?text=${encodeURIComponent(resume.jobTitle + '简历')}" alt="${resume.jobTitle}优秀简历" class="resume-image">
+                        </div>
+                        <div class="resume-actions">
+                            <button class="btn btn-outline view-btn" data-id="${resume.id}">
+                                <i class="fas fa-eye"></i> 查看详情
+                            </button>
+                            <button class="btn download-btn" data-id="${resume.id}">
+                                <i class="fas fa-download"></i> 下载参考
+                            </button>
+                        </div>
+                    `;
+
+                    favoritesGrid.appendChild(resumeBox);
+                });
+
+                // 为收藏页面添加按钮事件监听
+                document.querySelectorAll('#favorites-grid .view-btn').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const resumeId = this.getAttribute('data-id');
+                        viewResume(resumeId);
+                    });
+                });
+
+                document.querySelectorAll('#favorites-grid .download-btn').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const resumeId = this.getAttribute('data-id');
+                        downloadResume(resumeId);
+                    });
+                });
+
+                document.querySelectorAll('#favorites-grid .favorite-btn').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const resumeId = parseInt(this.getAttribute('data-id'));
+                        toggleFavorite(resumeId, this);
+                        // 从收藏页面移除
+                        this.closest('.resume-box').remove();
+                        renderFavorites();
+                    });
+                });
+            }
+
+            // 切换收藏状态
+            function toggleFavorite(resumeId, button) {
+                const resume = resumeData.find(r => r.id === resumeId);
+
+                if (resume) {
+                    resume.isFavorite = !resume.isFavorite;
+
+                    if (resume.isFavorite) {
+                        // 添加到收藏
+                        if (!userFavorites.includes(resumeId)) {
+                            userFavorites.push(resumeId);
+                        }
+                        button.classList.add('active');
+                    } else {
+                        // 从收藏移除
+                        userFavorites = userFavorites.filter(id => id !== resumeId);
+                        button.classList.remove('active');
+                    }
+
+                    // 保存到本地存储
+                    localStorage.setItem('userResumeFavorites', JSON.stringify(userFavorites));
+
+                    // 更新收藏数量
+                    document.getElementById('favorites-count').textContent = userFavorites.length;
+                }
+            }
+
+            // 查看简历详情
+            function viewResume(id) {
+                const resume = resumeData.find(r => r.id == id);
+                alert(`查看简历详情: ${resume.jobTitle}\n\n公司: ${resume.company}\n薪资: ${resume.salary}\n评分: ${resume.rating}分\n\n${resume.description}`);
+            }
+
+            // 下载简历参考
+            function downloadResume(id) {
+                const resume = resumeData.find(r => r.id == id);
+                alert(`下载简历参考: ${resume.jobTitle}\n\n这份优秀简历的PDF版本将开始下载`);
+
+                // 模拟浏览量增加
+                resume.views++;
+            }
+            // 移动设备下拉菜单处理
+            if (window.innerWidth <= 768) {
+                navItems.forEach(item => {
+                    item.addEventListener('click', function (e) {
+                        if (this.querySelector('.dropdown').style.display === 'block') {
+                            this.querySelector('.dropdown').style.display = 'none';
+                        } else {
+                            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                                dropdown.style.display = 'none';
+                            });
+                            this.querySelector('.dropdown').style.display = 'block';
+                        }
+                        e.preventDefault();
+                    });
+                });
+            }
+        });
+
+    </script>
+</body>
+
+</html>
