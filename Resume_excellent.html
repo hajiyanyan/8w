@@ -7,6 +7,7 @@
     <title>优秀简历展示</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* 原有CSS保持不变 */
         * {
             margin: 0;
             padding: 0;
@@ -506,11 +507,6 @@
     <div class="container">
         <nav class="navbar">
             <ul class="nav-list">
-                <!-- <li class="nav-item">
-                    <a href="primary.html" class="nav-link">
-                        <i class="fas fa-home"></i>首页
-                    </a>
-                </li> -->
                 <li class="nav-item">
                     <a href="Resume.html" class="nav-link">
                         <i class="fas fa-home"></i>用户简历
@@ -558,6 +554,11 @@
                         <option value="education">教育/培训</option>
                         <option value="medical">医疗/健康</option>
                         <option value="marketing">市场/销售</option>
+                        <option value="manufacturing">制造业</option>
+                        <option value="realestate">房地产</option>
+                        <option value="logistics">物流/运输</option>
+                        <option value="media">媒体/娱乐</option>
+                        <option value="law">法律/咨询</option>
                     </select>
                 </div>
 
@@ -642,9 +643,31 @@
     </footer>
 
     <script>
+        // 扩展的行业映射
+        const industryMap = {
+            'it': 'IT/互联网',
+            'finance': '金融/银行',
+            'education': '教育/培训',
+            'medical': '医疗/健康',
+            'marketing': '市场/销售',
+            'manufacturing': '制造业',
+            'realestate': '房地产',
+            'logistics': '物流/运输',
+            'media': '媒体/娱乐',
+            'law': '法律/咨询',
+            'other': '其他行业'
+        };
 
-        // 优秀简历数据
+        // 经验级别映射
+        const experienceMap = {
+            'entry': '初级(0-2年)',
+            'mid': '中级(3-5年)',
+            'senior': '高级(5年以上)'
+        };
+
+        // 扩展的优秀简历数据
         const resumeData = [
+            // IT/互联网行业
             {
                 id: 1,
                 jobTitle: "前端开发工程师",
@@ -676,36 +699,6 @@
                 isFavorite: false
             },
             {
-                id: 3,
-                jobTitle: "市场营销专员",
-                company: "某消费品公司",
-                industry: "marketing",
-                experience: "entry",
-                salary: "8-12K",
-                location: "广州",
-                rating: 4.3,
-                views: 1256,
-                tags: ["市场策划", "品牌推广", "社交媒体", "活动执行"],
-                image: "marketing-resume.jpg",
-                description: "创意十足，数据驱动，展示了出色的营销思维",
-                isFavorite: false
-            },
-            {
-                id: 4,
-                jobTitle: "财务分析师",
-                company: "某金融机构",
-                industry: "finance",
-                experience: "mid",
-                salary: "20-30K",
-                location: "深圳",
-                rating: 4.7,
-                views: 1832,
-                tags: ["财务分析", "数据分析", "投资评估", "风险管理"],
-                image: "finance-resume.jpg",
-                description: "专业严谨，数据详实，展示了扎实的财务功底",
-                isFavorite: false
-            },
-            {
                 id: 5,
                 jobTitle: "UI/UX设计师",
                 company: "某设计工作室",
@@ -718,21 +711,6 @@
                 tags: ["用户体验", "界面设计", "原型设计", "用户研究"],
                 image: "uiux-resume.jpg",
                 description: "设计感强，作品集丰富，用户体验思维突出",
-                isFavorite: false
-            },
-            {
-                id: 6,
-                jobTitle: "人力资源经理",
-                company: "某跨国企业",
-                industry: "other",
-                experience: "senior",
-                salary: "20-35K",
-                location: "北京",
-                rating: 4.5,
-                views: 1454,
-                tags: ["招聘", "员工关系", "绩效管理", "培训发展"],
-                image: "hr-resume.jpg",
-                description: "专业全面，案例丰富，展示了出色的人力资源管理能力",
                 isFavorite: false
             },
             {
@@ -751,6 +729,100 @@
                 isFavorite: false
             },
             {
+                id: 9,
+                jobTitle: "后端开发工程师",
+                company: "某科技创业公司",
+                industry: "it",
+                experience: "mid",
+                salary: "20-30K",
+                location: "深圳",
+                rating: 4.7,
+                views: 1723,
+                tags: ["Java", "Spring Boot", "微服务", "数据库"],
+                image: "backend-resume.jpg",
+                description: "架构思维清晰，技术深度和广度兼备",
+                isFavorite: false
+            },
+            {
+                id: 10,
+                jobTitle: "DevOps工程师",
+                company: "某云计算公司",
+                industry: "it",
+                experience: "senior",
+                salary: "25-40K",
+                location: "北京",
+                rating: 4.6,
+                views: 1542,
+                tags: ["Docker", "Kubernetes", "CI/CD", "自动化"],
+                image: "devops-resume.jpg",
+                description: "自动化思维强，技术栈全面，实践经验丰富",
+                isFavorite: false
+            },
+
+            // 金融行业
+            {
+                id: 4,
+                jobTitle: "财务分析师",
+                company: "某金融机构",
+                industry: "finance",
+                experience: "mid",
+                salary: "20-30K",
+                location: "深圳",
+                rating: 4.7,
+                views: 1832,
+                tags: ["财务分析", "数据分析", "投资评估", "风险管理"],
+                image: "finance-resume.jpg",
+                description: "专业严谨，数据详实，展示了扎实的财务功底",
+                isFavorite: false
+            },
+            {
+                id: 11,
+                jobTitle: "投资银行分析师",
+                company: "某国际投行",
+                industry: "finance",
+                experience: "mid",
+                salary: "30-50K",
+                location: "上海",
+                rating: 4.9,
+                views: 2105,
+                tags: ["财务建模", "尽职调查", "并购", "资本市场"],
+                image: "ib-resume.jpg",
+                description: "专业性强，分析能力突出，项目经验丰富",
+                isFavorite: false
+            },
+            {
+                id: 12,
+                jobTitle: "风险管理师",
+                company: "某商业银行",
+                industry: "finance",
+                experience: "senior",
+                salary: "25-35K",
+                location: "北京",
+                rating: 4.5,
+                views: 1328,
+                tags: ["风险评估", "合规管理", "内部控制", "数据分析"],
+                image: "risk-resume.jpg",
+                description: "风险意识强，专业知识扎实，逻辑清晰",
+                isFavorite: false
+            },
+
+            // 市场/销售行业
+            {
+                id: 3,
+                jobTitle: "市场营销专员",
+                company: "某消费品公司",
+                industry: "marketing",
+                experience: "entry",
+                salary: "8-12K",
+                location: "广州",
+                rating: 4.3,
+                views: 1256,
+                tags: ["市场策划", "品牌推广", "社交媒体", "活动执行"],
+                image: "marketing-resume.jpg",
+                description: "创意十足，数据驱动，展示了出色的营销思维",
+                isFavorite: false
+            },
+            {
                 id: 8,
                 jobTitle: "内容运营",
                 company: "某新媒体公司",
@@ -764,25 +836,189 @@
                 image: "content-resume.jpg",
                 description: "创意丰富，文笔优秀，展示了出色的内容运营能力",
                 isFavorite: false
+            },
+            {
+                id: 13,
+                jobTitle: "销售总监",
+                company: "某医疗器械公司",
+                industry: "marketing",
+                experience: "senior",
+                salary: "35-60K",
+                location: "北京",
+                rating: 4.7,
+                views: 1820,
+                tags: ["团队管理", "客户关系", "业务拓展", "战略规划"],
+                image: "sales-resume.jpg",
+                description: "领导能力强，业绩突出，战略思维清晰",
+                isFavorite: false
+            },
+
+            // 教育/培训行业
+            {
+                id: 14,
+                jobTitle: "高中英语教师",
+                company: "某重点中学",
+                industry: "education",
+                experience: "mid",
+                salary: "12-20K",
+                location: "上海",
+                rating: 4.6,
+                views: 1125,
+                tags: ["教学经验", "课程设计", "学生管理", "教研能力"],
+                image: "teacher-resume.jpg",
+                description: "教学经验丰富，教育理念先进，成果显著",
+                isFavorite: false
+            },
+            {
+                id: 15,
+                jobTitle: "在线教育产品经理",
+                company: "某教育科技公司",
+                industry: "education",
+                experience: "mid",
+                salary: "20-30K",
+                location: "北京",
+                rating: 4.5,
+                views: 1420,
+                tags: ["产品设计", "用户研究", "数据分析", "课程开发"],
+                image: "edu-pm-resume.jpg",
+                description: "教育+技术结合，产品思维清晰，用户导向",
+                isFavorite: false
+            },
+
+            // 医疗/健康行业
+            {
+                id: 16,
+                jobTitle: "临床研究医生",
+                company: "某三甲医院",
+                industry: "medical",
+                experience: "senior",
+                salary: "25-40K",
+                location: "广州",
+                rating: 4.8,
+                views: 1250,
+                tags: ["临床研究", "医学写作", "数据分析", "项目管理"],
+                image: "doctor-resume.jpg",
+                description: "专业背景强，研究经验丰富，学术成果突出",
+                isFavorite: false
+            },
+            {
+                id: 17,
+                jobTitle: "医药代表",
+                company: "某跨国药企",
+                industry: "medical",
+                experience: "mid",
+                salary: "15-25K",
+                location: "上海",
+                rating: 4.4,
+                views: 1320,
+                tags: ["客户关系", "产品推广", "市场分析", "销售技巧"],
+                image: "pharma-resume.jpg",
+                description: "专业知识扎实，沟通能力强，业绩突出",
+                isFavorite: false
+            },
+
+            // 制造业
+            {
+                id: 18,
+                jobTitle: "生产工程师",
+                company: "某制造企业",
+                industry: "manufacturing",
+                experience: "mid",
+                salary: "12-20K",
+                location: "苏州",
+                rating: 4.3,
+                views: 980,
+                tags: ["生产管理", "工艺优化", "质量控制", "效率提升"],
+                image: "manufacturing-resume.jpg",
+                description: "工艺知识扎实，问题解决能力强，注重效率",
+                isFavorite: false
+            },
+
+            // 房地产行业
+            {
+                id: 19,
+                jobTitle: "房地产项目经理",
+                company: "某房地产开发公司",
+                industry: "realestate",
+                experience: "senior",
+                salary: "25-40K",
+                location: "深圳",
+                rating: 4.5,
+                views: 1150,
+                tags: ["项目管理", "成本控制", "进度管理", "团队协作"],
+                image: "realestate-resume.jpg",
+                description: "项目管理经验丰富，成本控制能力强，执行力强",
+                isFavorite: false
+            },
+
+            // 物流/运输行业
+            {
+                id: 20,
+                jobTitle: "供应链管理师",
+                company: "某物流公司",
+                industry: "logistics",
+                experience: "mid",
+                salary: "15-25K",
+                location: "天津",
+                rating: 4.4,
+                views: 1020,
+                tags: ["供应链优化", "库存管理", "物流规划", "成本控制"],
+                image: "logistics-resume.jpg",
+                description: "供应链思维强，优化能力突出，注重效率提升",
+                isFavorite: false
+            },
+
+            // 媒体/娱乐行业
+            {
+                id: 21,
+                jobTitle: "影视制片人",
+                company: "某影视制作公司",
+                industry: "media",
+                experience: "senior",
+                salary: "30-50K",
+                location: "北京",
+                rating: 4.7,
+                views: 1420,
+                tags: ["项目管理", "创意策划", "预算控制", "团队管理"],
+                image: "media-resume.jpg",
+                description: "创意与执行力兼备，项目管理经验丰富",
+                isFavorite: false
+            },
+
+            // 法律/咨询行业
+            {
+                id: 22,
+                jobTitle: "律师",
+                company: "某律师事务所",
+                industry: "law",
+                experience: "mid",
+                salary: "25-40K",
+                location: "上海",
+                rating: 4.6,
+                views: 1250,
+                tags: ["法律咨询", "合同审查", "诉讼代理", "法律研究"],
+                image: "law-resume.jpg",
+                description: "专业能力强，逻辑思维清晰，案例经验丰富",
+                isFavorite: false
+            },
+
+            // 其他行业
+            {
+                id: 6,
+                jobTitle: "人力资源经理",
+                company: "某跨国企业",
+                industry: "other",
+                experience: "senior",
+                salary: "20-35K",
+                location: "北京",
+                rating: 4.5,
+                views: 1454,
+                tags: ["招聘", "员工关系", "绩效管理", "培训发展"],
+                image: "hr-resume.jpg",
+                description: "专业全面，案例丰富，展示了出色的人力资源管理能力",
+                isFavorite: false
             }
         ];
-
-        // 行业映射
-        const industryMap = {
-            'it': 'IT/互联网',
-            'finance': '金融/银行',
-            'education': '教育/培训',
-            'medical': '医疗/健康',
-            'marketing': '市场/销售',
-            'other': '其他行业'
-        };
-
-        // 经验级别映射
-        const experienceMap = {
-            'entry': '初级(0-2年)',
-            'mid': '中级(3-5年)',
-            'senior': '高级(5年以上)'
-        };
 
         // 用户收藏数据
         let userFavorites = JSON.parse(localStorage.getItem('userResumeFavorites')) || [];
@@ -795,17 +1031,6 @@
             const profileLink = document.getElementById('profile-link');
             const resumesPage = document.getElementById('resumes-page');
             const profilePage = document.getElementById('profile-page');
-
-            // 导航栏交互效果
-            navItems.forEach(item => {
-                item.addEventListener('mouseenter', function () {
-                    this.style.backgroundColor = '#34495e';
-                });
-
-                item.addEventListener('mouseleave', function () {
-                    this.style.backgroundColor = '';
-                });
-            });
 
             // 初始化收藏状态
             initFavorites();
@@ -1076,24 +1301,7 @@
                 // 模拟浏览量增加
                 resume.views++;
             }
-            // 移动设备下拉菜单处理
-            if (window.innerWidth <= 768) {
-                navItems.forEach(item => {
-                    item.addEventListener('click', function (e) {
-                        if (this.querySelector('.dropdown').style.display === 'block') {
-                            this.querySelector('.dropdown').style.display = 'none';
-                        } else {
-                            document.querySelectorAll('.dropdown').forEach(dropdown => {
-                                dropdown.style.display = 'none';
-                            });
-                            this.querySelector('.dropdown').style.display = 'block';
-                        }
-                        e.preventDefault();
-                    });
-                });
-            }
         });
-
     </script>
 </body>
 
