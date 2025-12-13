@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>超话社区 - 职炼场</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 80vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(90deg, #2c3e50, #4a6491);
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: #2c3e50;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 18px 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: #34495e;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f1f1f1;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            color: #3498db;
+            padding-left: 25px;
+        }
+
+        .dropdown-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 行业选择栏 */
+        .industry-filter {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .industry-filter h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 1.3rem;
+        }
+
+        .industry-filter h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .industry-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .industry-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            color: #333;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .industry-btn:hover {
+            background: #e3f2fd;
+            border-color: #3498db;
+            transform: translateY(-2px);
+        }
+
+        .industry-btn.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .industry-btn i {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+
+        .industry-btn.all-industries {
+            background: #ffcc00;
+            color: #333;
+            border-color: #ffcc00;
+        }
+
+        .industry-btn.all-industries.active {
+            background: #e6b800;
+            border-color: #e6b800;
+        }
+
+        /* 社区内容区域 */
+        .community-container {
+            display: flex;
+            flex: 1;
+        }
+
+        /* 侧边栏 - 标签筛选 */
+        .sidebar {
+            width: 250px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-right: 1px solid #eaeaea;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar h3 i {
+            margin-right: 10px;
+        }
+
+        .tags-container {
+            margin-bottom: 30px;
+        }
+
+        .tags-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+
+        .tags-title i {
+            margin-right: 8px;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            padding: 6px 12px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tag:hover {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .tag.selected {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .content-header h2 {
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+
+        .content-header h2 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .new-post-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .new-post-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .new-post-btn i {
+            margin-right: 8px;
+        }
+
+        /* 帖子列表 */
+        .posts-container {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .post-card {
+            background: white;
+            border: 1px solid #eaeaea;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .post-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .post-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+
+        .author-info h4 {
+            color: #2c3e50;
+            margin-bottom: 3px;
+            font-size: 1.1rem;
+        }
+
+        .post-time {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .post-tag {
+            background: #f1f8ff;
+            color: #3498db;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid #d1e9ff;
+        }
+
+        .post-content h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .post-content p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #f1f1f1;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .stat i {
+            margin-right: 6px;
+        }
+
+        .like-btn {
+            background: none;
+            border: none;
+            color: #7f8c8d;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .like-btn:hover {
+            background: #ffeaea;
+            color: #e74c3c;
+        }
+
+        .like-btn.liked {
+            color: #e74c3c;
+        }
+
+        .like-btn.liked i {
+            font-weight: 900;
+        }
+
+        .reply-btn {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .reply-btn:hover {
+            background: #27ae60;
+        }
+
+        .reply-btn i {
+            margin-right: 5px;
+        }
+
+        /* 回复区域 */
+        .replies-container {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #f1f1f1;
+            display: none;
+        }
+
+        .reply-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .reply-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .reply-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .reply-author .author-avatar {
+            width: 30px;
+            height: 30px;
+            font-size: 0.8rem;
+        }
+
+        .reply-content p {
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .reply-form {
+            margin-top: 15px;
+            display: none;
+        }
+
+        .reply-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: vertical;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+
+        .reply-form-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .cancel-reply-btn,
+        .submit-reply-btn {
+            padding: 6px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cancel-reply-btn {
+            background: #e0e0e0;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+
+        .submit-reply-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+        }
+
+        /* 发帖模态框 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal {
+            background: white;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-header h3 i {
+            margin-right: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .modal-tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .modal-tag {
+            padding: 8px 15px;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-tag:hover {
+            background: #e9ecef;
+        }
+
+        .modal-tag.selected {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        .cancel-btn,
+        .submit-btn {
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn {
+            background: #e0e0e0;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+
+        .cancel-btn:hover {
+            background: #d0d0d0;
+        }
+
+        .submit-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+        }
+
+        .submit-btn:hover {
+            background: #2980b9;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .nav-list {
+                flex-wrap: wrap;
+            }
+
+            .nav-item {
+                flex: 1 1 33.333%;
+            }
+
+            .community-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #eaeaea;
+            }
+
+            .industry-buttons {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-item {
+                flex: 1 1 50%;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .post-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .post-stats {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .stat-group {
+                display: flex;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-item {
+                flex: 1 1 100%;
+            }
+
+            .dropdown {
+                width: 100%;
+                left: 0;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .industry-buttons {
+                justify-content: flex-start;
+            }
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 1rem;
+        }
+
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1> 职炼场——超话社区</h1>
+        <p class="subtitle">与同行交流经验，分享求职心得，讨论行业动态，共同成长进步</p>
+    </header>
+
+    <div class="container">
+        <nav class="navbar">
+            <ul class="nav-list">
+                <!-- 模块1：岗位分析 -->
+                <li class="nav-item">
+                    <a href="Post_analysis.html" class="nav-link">
+                        <i class="fas fa-home"></i>岗位分析
+                    </a>
+                    <div class="dropdown">
+                        <a href="Post_analysis.html#Basic-situation" class="dropdown-item"><i
+                                class="fas fa-star"></i>岗位信息</a>
+                        <a href="Post_analysis.html#Skill-require" class="dropdown-item"><i
+                                class="fas fa-bullhorn"></i>技能要求</a>
+                        <a href="Post_analysis.html#Skill-require" class="dropdown-item"><i
+                                class="fas fa-chart-line"></i>可视化分析</a>
+                        <a href="Post_analysis.html#Develop-path" class="dropdown-item"><i
+                                class="fas fa-question-circle"></i>职业发展路径</a>
+                    </div>
+                </li>
+
+                <!-- 模块2：用户简历 -->
+                <li class="nav-item">
+                    <a href="Resume.html" class="nav-link">
+                        <i class="fas fa-box-open"></i>用户简历
+                    </a>
+                    <div class="dropdown">
+                        <a href="Resume_excellent.html" class="dropdown-item"><i class="fas fa-laptop"></i>模范简历选</a>
+                        <a href="Resume_mould.html" class="dropdown-item"><i class="fas fa-mobile-alt"></i>简历模板</a>
+                        <a href="Resume_test.html" class="dropdown-item"><i class="fas fa-cloud"></i>简历实训测评</a>
+                        <a href="Resume_test.html" class="dropdown-item"><i class="fas fa-cogs"></i>简历优化建议</a>
+                    </div>
+                </li>
+
+                <!-- 模块3：面试阶段-->
+                <li class="nav-item">
+                    <a href="Interview_write.html" class="nav-link">
+                        <i class="fas fa-concierge-bell"></i>笔试+面试
+                    </a>
+                    <div class="dropdown">
+                        <a href="Interview_write.html" class="dropdown-item"><i class="fas fa-palette"></i>面试宝典</a>
+                        <a href="Interview.html" class="dropdown-item"><i class="fas fa-headset"></i>AI模拟面试</a>
+                    </div>
+                </li>
+
+                <!-- 模块4：项目阶段 -->
+                <li class="nav-item">
+                    <a href="Project.html" class="nav-link">
+                        <i class="fas fa-book"></i>项目实训
+                    </a>
+                    <div class="dropdown">
+                        <a href="Project_test.html" class="dropdown-item"><i class="fas fa-file-alt"></i>技能自测题库</a>
+                        <a href="Project_video.html" class="dropdown-item"><i class="fas fa-video"></i>视频教程</a>
+                        <a href="Project_finall_test.html" class="dropdown-item"><i class="fas fa-blog"></i>项目完成度测评</a>
+                    </div>
+                </li>
+
+                <!-- 模块5：社区讨论 -->
+                <li class="nav-item">
+                    <a href="Community.html" class="nav-link">
+                        <i class="fas fa-comments"></i>社区讨论
+                    </a>
+                    <div class="dropdown">
+                        <a href="Community.html" class="dropdown-item"><i class="fas fa-hashtag"></i>超话社区</a>
+                        <a href="Community.html#hot-topics" class="dropdown-item"><i class="fas fa-fire"></i>热门话题</a>
+                        <a href="Community.html#my-posts" class="dropdown-item"><i class="fas fa-user"></i>我的帖子</a>
+                    </div>
+                </li>
+
+                <!-- 模块6：关于我们 -->
+                <li class="nav-item">
+                    <a href="Evaluation.html" class="nav-link">
+                        <i class="fas fa-users"></i>关于我们
+                    </a>
+                    <div class="dropdown">
+                        <a href="Evaluation.html" class="dropdown-item"><i class="fas fa-award"></i>评价与反馈</a>
+                        <a href="Evaluation.html#contact" class="dropdown-item"><i
+                                class="fas fa-map-marker-alt"></i>联系我们</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- 行业选择栏 -->
+        <div class="industry-filter">
+            <h3><i class="fas fa-filter"></i>选择行业讨论区</h3>
+            <div class="industry-buttons">
+                <button class="industry-btn all-industries active">
+                    <i class="fas fa-globe"></i>全部行业
+                </button>
+                <button class="industry-btn" data-industry="tech">
+                    <i class="fas fa-laptop-code"></i>互联网/IT
+                </button>
+                <button class="industry-btn" data-industry="finance">
+                    <i class="fas fa-chart-line"></i>金融/会计
+                </button>
+                <button class="industry-btn" data-industry="marketing">
+                    <i class="fas fa-bullhorn"></i>市场/营销
+                </button>
+                <button class="industry-btn" data-industry="education">
+                    <i class="fas fa-graduation-cap"></i>教育/培训
+                </button>
+                <button class="industry-btn" data-industry="health">
+                    <i class="fas fa-heartbeat"></i>医疗/健康
+                </button>
+                <button class="industry-btn" data-industry="manufacturing">
+                    <i class="fas fa-industry"></i>制造/工程
+                </button>
+                <button class="industry-btn" data-industry="design">
+                    <i class="fas fa-paint-brush"></i>设计/创意
+                </button>
+            </div>
+        </div>
+
+        <div class="community-container">
+            <!-- 侧边栏 - 标签筛选 -->
+            <div class="sidebar">
+                <h3><i class="fas fa-tags"></i>筛选标签</h3>
+                <div class="tags-container">
+                    <div class="tag-list">
+                        <span class="tag selected">全部标签</span>
+                        <span class="tag">面试经验</span>
+                        <span class="tag">简历修改</span>
+                        <span class="tag">薪资谈判</span>
+                        <span class="tag">职场困惑</span>
+                        <span class="tag">技能提升</span>
+                        <span class="tag">行业趋势</span>
+                        <span class="tag">求职心得</span>
+                        <span class="tag">实习分享</span>
+                        <span class="tag">职业规划</span>
+                        <span class="tag">offer选择</span>
+                        <span class="tag">工作日常</span>
+                        <span class="tag">考证心得</span>
+                    </div>
+                </div>
+
+                <h3><i class="fas fa-fire"></i>热门话题</h3>
+                <div class="hot-topics">
+                    <div class="hot-topic">#面试被问到职业规划怎么答</div>
+                    <div class="hot-topic">#简历一页还是两页好</div>
+                    <div class="hot-topic">#如何谈薪资不伤感情</div>
+                    <div class="hot-topic">#AI对哪些职业影响最大</div>
+                </div>
+            </div>
+
+            <!-- 主内容区 - 帖子列表 -->
+            <div class="main-content">
+                <div class="content-header">
+                    <h2><i class="fas fa-hashtag"></i>全部行业讨论区</h2>
+                    <button class="new-post-btn" id="newPostBtn">
+                        <i class="fas fa-plus"></i>发布新帖
+                    </button>
+                </div>
+
+                <div class="posts-container" id="postsContainer">
+                    <!-- 帖子会通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 发帖模态框 -->
+    <div class="modal-overlay" id="postModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i>发布新帖子</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="postForm">
+                    <div class="form-group">
+                        <label for="postTitle">帖子标题</label>
+                        <input type="text" id="postTitle" placeholder="请输入帖子标题" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postIndustry">选择行业</label>
+                        <select id="postIndustry" required>
+                            <option value="all">全部行业</option>
+                            <option value="tech">互联网/IT</option>
+                            <option value="finance">金融/会计</option>
+                            <option value="marketing">市场/营销</option>
+                            <option value="education">教育/培训</option>
+                            <option value="health">医疗/健康</option>
+                            <option value="manufacturing">制造/工程</option>
+                            <option value="design">设计/创意</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>选择标签（最多3个）</label>
+                        <div class="modal-tag-list">
+                            <span class="modal-tag" data-tag="面试经验">面试经验</span>
+                            <span class="modal-tag" data-tag="简历修改">简历修改</span>
+                            <span class="modal-tag" data-tag="薪资谈判">薪资谈判</span>
+                            <span class="modal-tag" data-tag="职场困惑">职场困惑</span>
+                            <span class="modal-tag" data-tag="技能提升">技能提升</span>
+                            <span class="modal-tag" data-tag="行业趋势">行业趋势</span>
+                            <span class="modal-tag" data-tag="求职心得">求职心得</span>
+                            <span class="modal-tag" data-tag="实习分享">实习分享</span>
+                            <span class="modal-tag" data-tag="职业规划">职业规划</span>
+                            <span class="modal-tag" data-tag="offer选择">offer选择</span>
+                        </div>
+                        <input type="hidden" id="selectedTags" value="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postContent">帖子内容</label>
+                        <textarea id="postContent" placeholder="请详细描述您的问题或分享您的经验..." required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" id="cancelPost">取消</button>
+                <button class="submit-btn" id="submitPost">发布帖子</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 职炼场超话社区 | 与同行交流，共同成长</p>
+    </footer>
+
+    <script>
+        // 可爱的用户名和头像颜色
+        const cuteUsernames = [
+            "代码小熊猫", "求职小天使", "面试小达人", "职场小萌新", "offer收割机",
+            "简历小能手", "面经小王子", "HR小可爱", "实习小菜鸟", "工作小蜜蜂",
+            "学习小蜗牛", "进步小火箭", "成长小树苗", "努力小太阳", "梦想小星星"
+        ];
+
+        const avatarColors = [
+            "#3498db", "#2ecc71", "#e74c3c", "#f39c12", "#9b59b6",
+            "#1abc9c", "#d35400", "#c0392b", "#16a085", "#8e44ad",
+            "#27ae60", "#2980b9", "#f1c40f", "#e67e22", "#34495e"
+        ];
+
+        // 示例帖子数据 - 包含多个行业
+        const examplePosts = [
+            {
+                id: 1,
+                author: "代码小熊猫",
+                industry: "tech",
+                industryName: "互联网/IT",
+                title: "腾讯前端开发岗三面经验分享",
+                content: "刚刚结束了腾讯前端开发岗位的终面，分享一下面试经历。一面主要考察基础技术，二面是项目深挖，三面是技术总监面。问了很多关于React性能优化和项目架构的问题，最后还考察了系统设计能力。准备了一周，感觉还是很有收获的。",
+                tags: ["面试经验", "大厂"],
+                views: 245,
+                replies: 18,
+                likes: 42,
+                liked: false,
+                time: "2小时前",
+                repliesData: [
+                    { author: "求职小天使", content: "感谢分享！可以具体说说React性能优化都问了哪些方面吗？", time: "1小时前" },
+                    { author: "面经小王子", content: "系统设计问了什么题目？可以分享一下吗？", time: "45分钟前" }
+                ]
+            },
+            {
+                id: 2,
+                author: "简历小能手",
+                industry: "finance",
+                industryName: "金融/会计",
+                title: "四大会计师事务所面试经验",
+                content: "参加了普华永道的审计岗位面试，分享一些经验。第一轮是群面，讨论一个商业案例；第二轮是合伙人面试，主要问职业规划和个人素质。感觉四大比较看重团队协作能力和抗压能力。",
+                tags: ["面试经验", "实习分享"],
+                views: 189,
+                replies: 24,
+                likes: 15,
+                liked: false,
+                time: "昨天",
+                repliesData: [
+                    { author: "职场小萌新", content: "群面的时候怎么表现比较加分？", time: "20小时前" }
+                ]
+            },
+            {
+                id: 3,
+                author: "offer收割机",
+                industry: "marketing",
+                industryName: "市场/营销",
+                title: "宝洁市场部终面经验",
+                content: "刚刚通过宝洁市场部的终面，分享一下经验。终面是部门总监面试，主要考察对市场的理解和创意能力。问了我最近关注的一个营销案例，以及如果让我来策划会怎么做。感觉营销岗位很看重创新思维。",
+                tags: ["面试经验", "行业趋势"],
+                views: 167,
+                replies: 12,
+                likes: 38,
+                liked: false,
+                time: "3天前",
+                repliesData: []
+            },
+            {
+                id: 4,
+                author: "成长小树苗",
+                industry: "education",
+                industryName: "教育/培训",
+                title: "新东方教师岗面试经验分享",
+                content: "参加了新东方中学数学教师的面试，分享一些经验。试讲环节很重要，要设计有趣的教学活动。面试官还问了如何处理学生成绩差异问题。感觉教育行业最重要的是教学热情和耐心。",
+                tags: ["面试经验", "求职心得"],
+                views: 134,
+                replies: 8,
+                likes: 22,
+                liked: false,
+                time: "4天前",
+                repliesData: [
+                    { author: "学习小蜗牛", content: "试讲一般给多长时间准备？", time: "3天前" }
+                ]
+            },
+            {
+                id: 5,
+                author: "努力小太阳",
+                industry: "health",
+                industryName: "医疗/健康",
+                title: "三甲医院护士岗位应聘经验",
+                content: "刚通过了一家三甲医院的护士岗位面试，分享一些经验。除了专业知识和技能考核，还重点考察了沟通能力和应急处理能力。面试官问了很多实际工作中可能遇到的问题，比如如何与难缠的家属沟通。",
+                tags: ["面试经验", "职场困惑"],
+                views: 98,
+                replies: 5,
+                likes: 17,
+                liked: false,
+                time: "5天前",
+                repliesData: []
+            },
+            {
+                id: 6,
+                author: "进步小火箭",
+                industry: "manufacturing",
+                industryName: "制造/工程",
+                title: "机械工程师岗位面试经验",
+                content: "面试了一家大型制造企业的机械工程师岗位，分享经验。技术面试问了很多CAD绘图和力学计算的问题，还有项目经验。感觉制造业比较看重实际操作能力和项目经验。",
+                tags: ["面试经验", "技能提升"],
+                views: 112,
+                replies: 7,
+                likes: 14,
+                liked: false,
+                time: "1周前",
+                repliesData: []
+            },
+            {
+                id: 7,
+                author: "梦想小星星",
+                industry: "design",
+                industryName: "设计/创意",
+                title: "UI设计师作品集如何准备",
+                content: "作为UI设计师，作品集是找工作的关键。建议选择3-5个完整的项目，展示设计思路和过程比只放最终效果图更重要。要说明设计解决了什么问题，如何考虑用户体验。",
+                tags: ["简历修改", "职业规划"],
+                views: 201,
+                replies: 15,
+                likes: 45,
+                liked: false,
+                time: "1周前",
+                repliesData: [
+                    { author: "HR小可爱", content: "作品集用PDF好还是在线链接好？", time: "6天前" }
+                ]
+            },
+            {
+                id: 8,
+                author: "工作小蜜蜂",
+                industry: "tech",
+                industryName: "互联网/IT",
+                title: "字节跳动后端开发面试题整理",
+                content: "整理了字节跳动后端开发岗位的面试题，包括算法题、系统设计题和项目相关问题。感觉字节比较看重算法基础和系统设计能力，LeetCode中等难度题目要熟练掌握。",
+                tags: ["面试经验", "技能提升"],
+                views: 312,
+                replies: 28,
+                likes: 67,
+                liked: false,
+                time: "2天前",
+                repliesData: []
+            }
+        ];
+
+        // 当前显示的帖子
+        let currentPosts = [...examplePosts];
+        // 当前用户信息
+        const currentUser = {
+            name: "我",
+            avatarColor: "#ff6b6b"
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // 初始化帖子
+            renderPosts(currentPosts);
+
+            // 导航栏交互效果
+            const navItems = document.querySelectorAll('.nav-item');
+
+            navItems.forEach(item => {
+                item.addEventListener('mouseenter', function () {
+                    this.style.backgroundColor = '#34495e';
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    this.style.backgroundColor = '';
+                });
+            });
+
+            // 行业选择
+            const industryBtns = document.querySelectorAll('.industry-btn');
+            const tags = document.querySelectorAll('.tag');
+            const modalTags = document.querySelectorAll('.modal-tag');
+
+            industryBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    industryBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const industry = this.getAttribute('data-industry');
+                    const industryNames = {
+                        'tech': '互联网/IT',
+                        'finance': '金融/会计',
+                        'marketing': '市场/营销',
+                        'education': '教育/培训',
+                        'health': '医疗/健康',
+                        'manufacturing': '制造/工程',
+                        'design': '设计/创意'
+                    };
+
+                    let headerText = "全部行业讨论区";
+                    if (industry) {
+                        headerText = `${industryNames[industry]} 讨论区`;
+
+                        // 筛选帖子
+                        currentPosts = examplePosts.filter(post => post.industry === industry);
+                    } else {
+                        // 显示全部帖子
+                        currentPosts = [...examplePosts];
+                    }
+
+                    document.querySelector('.content-header h2').innerHTML =
+                        `<i class="fas fa-hashtag"></i>${headerText}`;
+
+                    renderPosts(currentPosts);
+                });
+            });
+
+            // 标签选择
+            tags.forEach(tag => {
+                tag.addEventListener('click', function () {
+                    if (this.textContent === "全部标签") {
+                        // 点击"全部标签"时，取消其他标签的选择
+                        tags.forEach(t => {
+                            if (t !== this) t.classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+
+                        // 显示所有帖子
+                        renderPosts(currentPosts);
+                    } else {
+                        // 处理其他标签
+                        if (this.classList.contains('selected')) {
+                            this.classList.remove('selected');
+
+                            // 检查是否还有标签被选中
+                            const selectedTags = document.querySelectorAll('.tag.selected');
+                            if (selectedTags.length === 0) {
+                                // 如果没有标签被选中，选择"全部标签"
+                                document.querySelector('.tag[data-tag="全部标签"]').classList.add('selected');
+                            }
+                        } else {
+                            // 先取消"全部标签"的选择
+                            document.querySelector('.tag[data-tag="全部标签"]').classList.remove('selected');
+                            this.classList.add('selected');
+                        }
+
+                        // 筛选帖子
+                        const selectedTags = Array.from(document.querySelectorAll('.tag.selected'))
+                            .filter(t => t.textContent !== "全部标签")
+                            .map(t => t.textContent);
+
+                        if (selectedTags.length > 0) {
+                            const filteredPosts = currentPosts.filter(post =>
+                                post.tags.some(tag => selectedTags.includes(tag))
+                            );
+                            renderPosts(filteredPosts);
+                        } else {
+                            renderPosts(currentPosts);
+                        }
+                    }
+                });
+            });
+
+            // 发帖模态框
+            const newPostBtn = document.getElementById('newPostBtn');
+            const postModal = document.getElementById('postModal');
+            const closeModal = document.getElementById('closeModal');
+            const cancelPost = document.getElementById('cancelPost');
+            const submitPost = document.getElementById('submitPost');
+            const selectedTagsInput = document.getElementById('selectedTags');
+
+            // 打开模态框
+            newPostBtn.addEventListener('click', function () {
+                postModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+
+            // 关闭模态框
+            function closePostModal() {
+                postModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                document.getElementById('postForm').reset();
+                modalTags.forEach(tag => tag.classList.remove('selected'));
+                selectedTagsInput.value = '';
+            }
+
+            closeModal.addEventListener('click', closePostModal);
+            cancelPost.addEventListener('click', closePostModal);
+
+            // 点击模态框外部关闭
+            postModal.addEventListener('click', function (e) {
+                if (e.target === postModal) {
+                    closePostModal();
+                }
+            });
+
+            // 模态框标签选择
+            modalTags.forEach(tag => {
+                tag.addEventListener('click', function () {
+                    if (this.classList.contains('selected')) {
+                        this.classList.remove('selected');
+                    } else {
+                        // 限制最多选择3个标签
+                        const selectedModalTags = document.querySelectorAll('.modal-tag.selected');
+                        if (selectedModalTags.length < 3) {
+                            this.classList.add('selected');
+                        } else {
+                            alert('最多只能选择3个标签');
+                            return;
+                        }
+                    }
+
+                    // 更新隐藏输入框的值
+                    const selectedTagNames = Array.from(document.querySelectorAll('.modal-tag.selected'))
+                        .map(t => t.getAttribute('data-tag'))
+                        .join(',');
+                    selectedTagsInput.value = selectedTagNames;
+                });
+            });
+
+            // 提交帖子
+            submitPost.addEventListener('click', function () {
+                const title = document.getElementById('postTitle').value;
+                const industry = document.getElementById('postIndustry').value;
+                const content = document.getElementById('postContent').value;
+                const selectedTags = selectedTagsInput.value;
+
+                if (!title || !content) {
+                    alert('请填写标题和内容');
+                    return;
+                }
+
+                if (!selectedTags) {
+                    alert('请至少选择一个标签');
+                    return;
+                }
+
+                // 获取行业名称
+                const industryNames = {
+                    'all': '全部行业',
+                    'tech': '互联网/IT',
+                    'finance': '金融/会计',
+                    'marketing': '市场/营销',
+                    'education': '教育/培训',
+                    'health': '医疗/健康',
+                    'manufacturing': '制造/工程',
+                    'design': '设计/创意'
+                };
+
+                // 创建新帖子
+                const postId = Date.now();
+                const tagsArray = selectedTags.split(',');
+
+                const newPost = {
+                    id: postId,
+                    author: currentUser.name,
+                    industry: industry === 'all' ? 'all' : industry,
+                    industryName: industryNames[industry],
+                    title: title,
+                    content: content,
+                    tags: tagsArray,
+                    views: 1,
+                    replies: 0,
+                    likes: 0,
+                    liked: false,
+                    time: "刚刚",
+                    repliesData: []
+                };
+
+                // 添加到帖子列表
+                examplePosts.unshift(newPost);
+
+                // 根据当前筛选条件更新显示
+                const activeIndustryBtn = document.querySelector('.industry-btn.active');
+                const industryFilter = activeIndustryBtn.getAttribute('data-industry');
+
+                if (!industryFilter && industry === 'all') {
+                    // 显示全部帖子，新帖子符合条件
+                    currentPosts.unshift(newPost);
+                } else if (industryFilter === industry) {
+                    // 当前筛选的行业与新帖子行业匹配
+                    currentPosts.unshift(newPost);
+                } else if (!industryFilter && industry !== 'all') {
+                    // 当前显示全部帖子，但新帖子有特定行业
+                    currentPosts.unshift(newPost);
+                }
+                // 其他情况：当前筛选的行业与新帖子行业不匹配，不显示新帖子
+
+                renderPosts(currentPosts);
+
+                alert('帖子发布成功！');
+                closePostModal();
+            });
+
+            // 移动设备导航菜单处理
+            if (window.innerWidth <= 768) {
+                navItems.forEach(item => {
+                    item.addEventListener('click', function (e) {
+                        const dropdown = this.querySelector('.dropdown');
+                        if (dropdown.style.display === 'block') {
+                            dropdown.style.display = 'none';
+                        } else {
+                            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                                dropdown.style.display = 'none';
+                            });
+                            dropdown.style.display = 'block';
+                        }
+                        e.preventDefault();
+                    });
+                });
+            }
+        });
+
+        // 渲染帖子列表
+        function renderPosts(posts) {
+            const postsContainer = document.getElementById('postsContainer');
+            postsContainer.innerHTML = '';
+
+            if (posts.length === 0) {
+                postsContainer.innerHTML = '<div class="no-posts">暂无相关帖子，快来发布第一个吧！</div>';
+                return;
+            }
+
+            posts.forEach(post => {
+                // 随机选择头像颜色
+                const avatarColor = getAvatarColor(post.author);
+                // 获取作者名字的首字母
+                const avatarText = post.author.substring(0, 1);
+
+                const postCard = document.createElement('div');
+                postCard.className = 'post-card';
+                postCard.setAttribute('data-industry', post.industry);
+                postCard.innerHTML = `
+                    <div class="post-header">
+                        <div class="post-author">
+                            <div class="author-avatar" style="background-color: ${avatarColor}">${avatarText}</div>
+                            <div class="author-info">
+                                <h4>${post.author}</h4>
+                                <div class="post-time">${post.time} · ${post.industryName}</div>
+                            </div>
+                        </div>
+                        <div class="post-tags">
+                            ${post.tags.map(tag => `<span class="post-tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <h3>${post.title}</h3>
+                        <p>${post.content}</p>
+                    </div>
+                    <div class="post-stats">
+                        <div class="stat-group">
+                            <div class="stat"><i class="fas fa-eye"></i> ${post.views} 浏览</div>
+                            <div class="stat"><i class="fas fa-comment"></i> ${post.replies} 回复</div>
+                            <button class="like-btn ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
+                                <i class="fas fa-heart"></i> ${post.likes} 点赞
+                            </button>
+                        </div>
+                        <button class="reply-btn" data-post-id="${post.id}">
+                            <i class="fas fa-reply"></i>回复
+                        </button>
+                    </div>
+                    <div class="replies-container" id="replies-${post.id}">
+                        ${post.repliesData.map(reply => {
+                    const replyAvatarColor = getAvatarColor(reply.author);
+                    const replyAvatarText = reply.author.substring(0, 1);
+                    return `
+                            <div class="reply-card">
+                                <div class="reply-header">
+                                    <div class="reply-author">
+                                        <div class="author-avatar" style="background-color: ${replyAvatarColor}">${replyAvatarText}</div>
+                                        <div class="author-info">
+                                            <h4>${reply.author}</h4>
+                                            <div class="post-time">${reply.time}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="reply-content">
+                                    <p>${reply.content}</p>
+                                </div>
+                            </div>`;
+                }).join('')}
+                        <div class="reply-form" id="reply-form-${post.id}">
+                            <textarea placeholder="写下你的回复..." rows="3"></textarea>
+                            <div class="reply-form-buttons">
+                                <button class="cancel-reply-btn" data-post-id="${post.id}">取消</button>
+                                <button class="submit-reply-btn" data-post-id="${post.id}">提交回复</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                postsContainer.appendChild(postCard);
+            });
+
+            // 重新绑定事件
+            bindPostEvents();
+        }
+
+        // 绑定帖子相关事件
+        function bindPostEvents() {
+            // 点赞按钮功能
+            const likeBtns = document.querySelectorAll('.like-btn');
+
+            likeBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const postId = parseInt(this.getAttribute('data-post-id'));
+                    const post = examplePosts.find(p => p.id === postId);
+
+                    if (post) {
+                        if (post.liked) {
+                            // 取消点赞
+                            post.likes--;
+                            post.liked = false;
+                            this.classList.remove('liked');
+                        } else {
+                            // 点赞
+                            post.likes++;
+                            post.liked = true;
+                            this.classList.add('liked');
+                        }
+
+                        // 更新点赞数显示
+                        this.innerHTML = `<i class="fas fa-heart"></i> ${post.likes} 点赞`;
+
+                        // 更新当前显示的帖子
+                        const likeText = this.querySelector('i').nextSibling.textContent.trim();
+                        this.querySelector('i').nextSibling.textContent = ` ${post.likes} 点赞`;
+                    }
+                });
+            });
+
+            // 回复按钮功能
+            const replyBtns = document.querySelectorAll('.reply-btn');
+
+            replyBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const postId = this.getAttribute('data-post-id');
+                    const repliesContainer = document.getElementById(`replies-${postId}`);
+                    const replyForm = document.getElementById(`reply-form-${postId}`);
+
+                    if (repliesContainer.style.display === 'block') {
+                        repliesContainer.style.display = 'none';
+                        replyForm.style.display = 'none';
+                    } else {
+                        repliesContainer.style.display = 'block';
+                        replyForm.style.display = 'block';
+
+                        // 滚动到回复表单
+                        replyForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                });
+            });
+
+            // 取消回复按钮
+            const cancelReplyBtns = document.querySelectorAll('.cancel-reply-btn');
+
+            cancelReplyBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const postId = this.getAttribute('data-post-id');
+                    const replyForm = document.getElementById(`reply-form-${postId}`);
+                    const textarea = replyForm.querySelector('textarea');
+
+                    textarea.value = '';
+                    replyForm.style.display = 'none';
+                });
+            });
+
+            // 提交回复按钮
+            const submitReplyBtns = document.querySelectorAll('.submit-reply-btn');
+
+            submitReplyBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const postId = parseInt(this.getAttribute('data-post-id'));
+                    const replyForm = document.getElementById(`reply-form-${postId}`);
+                    const textarea = replyForm.querySelector('textarea');
+                    const replyContent = textarea.value.trim();
+
+                    if (!replyContent) {
+                        alert('请输入回复内容');
+                        return;
+                    }
+
+                    const post = examplePosts.find(p => p.id === postId);
+
+                    if (post) {
+                        // 随机选择一个可爱的用户名
+                        const randomUsername = cuteUsernames[Math.floor(Math.random() * cuteUsernames.length)];
+
+                        // 添加回复
+                        post.repliesData.unshift({
+                            author: randomUsername,
+                            content: replyContent,
+                            time: "刚刚"
+                        });
+
+                        // 更新回复数
+                        post.replies++;
+
+                        // 重新渲染帖子
+                        const activeIndustryBtn = document.querySelector('.industry-btn.active');
+                        const industryFilter = activeIndustryBtn.getAttribute('data-industry');
+
+                        if (!industryFilter) {
+                            // 显示全部帖子
+                            currentPosts = [...examplePosts];
+                        } else {
+                            // 筛选帖子
+                            currentPosts = examplePosts.filter(p => p.industry === industryFilter);
+                        }
+
+                        renderPosts(currentPosts);
+
+                        // 清空回复框
+                        textarea.value = '';
+
+                        // 显示成功消息
+                        alert('回复成功！');
+                    }
+                });
+            });
+        }
+
+        // 根据用户名获取头像颜色
+        function getAvatarColor(username) {
+            let hash = 0;
+            for (let i = 0; i < username.length; i++) {
+                hash = username.charCodeAt(i) + ((hash << 5) - hash);
+            }
+
+            const index = Math.abs(hash) % avatarColors.length;
+            return avatarColors[index];
+        }
+    </script>
+</body>
+
+</html>

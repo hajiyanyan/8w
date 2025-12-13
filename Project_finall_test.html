@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目完成度测评 | 职场实训沙盘</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(90deg, #2c3e50, #4a6491);
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: #2c3e50;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 18px 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: #34495e;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f1f1f1;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            color: #3498db;
+            padding-left: 25px;
+        }
+
+        .dropdown-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 内容区域样式 */
+        .content {
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        .content h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        /* 测评介绍区域 */
+        .assessment-intro {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .assessment-intro h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .assessment-intro h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        /* 行业选择区域 */
+        .industry-selector {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .industry-selector h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .industry-selector h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .industry-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .industry-category {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .industry-category:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        .industry-category.active {
+            border-color: #3498db;
+            background: #e8f4fc;
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .category-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* 开始测评按钮 */
+        .start-assessment {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* 项目测评区域 */
+        .assessment-section {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .assessment-section.active {
+            display: block;
+        }
+
+        .project-info {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .project-info h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .project-info h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .project-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .project-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-item i {
+            color: #27ae60;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* 技能测评区域 */
+        .skills-assessment {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .skills-assessment h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .skills-assessment h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .skill-category {
+            margin-bottom: 30px;
+        }
+
+        .category-header {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .category-header i {
+            color: #3498db;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .category-title {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .skill-item:last-child {
+            border-bottom: none;
+        }
+
+        .skill-info {
+            flex: 1;
+        }
+
+        .skill-name {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .skill-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .skill-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .option-btn {
+            padding: 8px 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .option-btn:hover {
+            background: #f8f9fa;
+        }
+
+        .option-btn.selected.yes {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+
+        .option-btn.selected.no {
+            background: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+
+        /* 提交按钮区域 */
+        .submit-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-large {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        /* 结果区域 */
+        .result-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-top: 30px;
+            display: none;
+            text-align: center;
+        }
+
+        .result-section.active {
+            display: block;
+        }
+
+        .score-display {
+            margin-bottom: 30px;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #3498db;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-label {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .result-message {
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .improvement-suggestions {
+            text-align: left;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .improvement-suggestions h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .improvement-suggestions h4 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .suggestion-list {
+            list-style: none;
+        }
+
+        .suggestion-list li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .suggestion-list li:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-list li i {
+            margin-right: 10px;
+            color: #e74c3c;
+            font-size: 0.9rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .nav-list {
+                flex-wrap: wrap;
+            }
+
+            .nav-item {
+                flex: 1 1 33.333%;
+            }
+
+            .industry-categories {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+
+            .project-features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-item {
+                flex: 1 1 50%;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .industry-categories {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .skill-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .skill-options {
+                margin-top: 10px;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .option-btn {
+                flex: 1;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-item {
+                flex: 1 1 100%;
+            }
+
+            .dropdown {
+                width: 100%;
+                left: 0;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .industry-categories {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 1rem;
+        }
+
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>项目实训</h1>
+        <p class="subtitle">在求职和成长的道路上，一个扎实的项目经历胜过千言万语。在这里，用最小的成本，发现并补齐最大的知识漏洞。</p>
+    </header>
+
+    <div class="container">
+        <nav class="navbar">
+            <ul class="nav-list">
+                <!-- 模块1：岗位分析 -->
+                <li class="nav-item">
+                    <a href="Post_analysis.html" class="nav-link">
+                        <i class="fas fa-home"></i>岗位分析
+                    </a>
+                    <div class="dropdown">
+                        <a href="Post_analysis.html#Basic-situation" class="dropdown-item"><i
+                                class="fas fa-star"></i>岗位信息</a>
+                        <a href="Post_analysis.html#Skill-require" class="dropdown-item"><i
+                                class="fas fa-bullhorn"></i>技能要求</a>
+                        <a href="Post_analysis.html#Skill-require" class="dropdown-item"><i
+                                class="fas fa-chart-line"></i>可视化分析</a>
+                        <a href="Post_analysis.html#Develop-path" class="dropdown-item"><i
+                                class="fas fa-question-circle"></i>职业发展路径</a>
+                    </div>
+                </li>
+
+                <!-- 模块2：用户简历 -->
+                <li class="nav-item">
+                    <a href="Resume.html" class="nav-link">
+                        <i class="fas fa-box-open"></i>用户简历
+                    </a>
+                    <div class="dropdown">
+                        <a href="Resume_excellent.html" class="dropdown-item"><i class="fas fa-laptop"></i>模范简历选</a>
+                        <a href="Resume_mould.html" class="dropdown-item"><i class="fas fa-mobile-alt"></i>简历模板</a>
+                        <a href="Resume_test.html" class="dropdown-item"><i class="fas fa-cloud"></i>简历实训测评</a>
+
+                    </div>
+                </li>
+
+                <!-- 模块3：面试阶段-->
+                <li class="nav-item">
+                    <a href="Interview_write.html" class="nav-link">
+                        <i class="fas fa-concierge-bell"></i>笔试+面试
+                    </a>
+                    <div class="dropdown">
+                        <a href="Interview_write.html" class="dropdown-item"><i class="fas fa-palette"></i>笔试系统</a>
+                        <a href="Interview.html" class="dropdown-item"><i class="fas fa-headset"></i>面试系统</a>
+                    </div>
+                </li>
+
+                <!-- 模块4：项目阶段 -->
+                <li class="nav-item">
+                    <a href="Project.html" class="nav-link">
+                        <i class="fas fa-book"></i>项目实训
+                    </a>
+                    <div class="dropdown">
+                        <a href="Project_test.html" class="dropdown-item"><i class="fas fa-file-alt"></i>技能自测题库</a>
+                        <a href="Project_video.html" class="dropdown-item"><i class="fas fa-video"></i>视频教程</a>
+                        <a href="Project_finall_test.html" class="dropdown-item"><i class="fas fa-blog"></i>项目完成度测评</a>
+                    </div>
+                </li>
+
+                <!-- 模块5：社区讨论 -->
+                <li class="nav-item">
+                    <a href="Community.html" class="nav-link">
+                        <i class="fas fa-comments"></i>超话社区
+                    </a>
+                    <div class="dropdown">
+                        <a href="Community.html" class="dropdown-item"><i class="fas fa-hashtag"></i>超话广场</a>
+                        <a href="Community.html#hot-topics" class="dropdown-item"><i class="fas fa-fire"></i>热门话题</a>
+                        <a href="Community.html#my-posts" class="dropdown-item"><i class="fas fa-user"></i>我的帖子</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <h2>项目完成度测评</h2>
+            <p>功能定位： 对用户完成的项目作品进行智能、多维度的评估，提供量化分数和具体优化建议。</p>
+
+            <div class="assessment-intro">
+                <h3><i class="fas fa-lightbulb"></i> 测评介绍</h3>
+                <p>项目完成度测评通过模拟真实工作场景中的项目需求，帮助您评估自己在特定行业中的技能掌握情况。您将看到一个完整的项目描述，然后根据项目需求回答一系列技能相关问题。系统将根据您的回答计算项目完成度得分，并提供个性化的学习建议。
+                </p>
+            </div>
+
+            <!-- 行业选择区域 -->
+            <div class="industry-selector">
+                <h3><i class="fas fa-briefcase"></i> 第一步：选择行业</h3>
+                <p>请选择您要测评的行业方向</p>
+                <div class="industry-categories">
+                    <div class="industry-category" data-industry="frontend">
+                        <div class="category-icon"><i class="fas fa-code"></i></div>
+                        <div class="category-name">前端开发</div>
+                    </div>
+                    <div class="industry-category" data-industry="backend">
+                        <div class="category-icon"><i class="fas fa-server"></i></div>
+                        <div class="category-name">后端开发</div>
+                    </div>
+                    <div class="industry-category" data-industry="finance">
+                        <div class="category-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="category-name">金融分析</div>
+                    </div>
+                    <div class="industry-category" data-industry="marketing">
+                        <div class="category-icon"><i class="fas fa-bullhorn"></i></div>
+                        <div class="category-name">市场营销</div>
+                    </div>
+                    <div class="industry-category" data-industry="manufacturing">
+                        <div class="category-icon"><i class="fas fa-industry"></i></div>
+                        <div class="category-name">制造业</div>
+                    </div>
+                    <div class="industry-category" data-industry="education">
+                        <div class="category-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="category-name">教育培训</div>
+                    </div>
+                </div>
+                <div class="start-assessment">
+                    <button class="btn btn-large" id="startAssessment">开始测评</button>
+                </div>
+            </div>
+
+            <!-- 前端开发测评 -->
+            <div class="assessment-section" id="frontend-assessment">
+                <div class="project-info">
+                    <h3><i class="fas fa-project-diagram"></i> 项目描述：企业级电商平台前端开发</h3>
+                    <p class="project-description">
+                        您需要开发一个完整的企业级电商平台前端应用。该项目需要实现用户注册登录、商品展示、购物车管理、订单处理、支付集成等核心功能。要求使用现代前端技术栈，保证良好的用户体验和性能优化。
+                    </p>
+                    <div class="project-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>响应式设计，支持多设备访问</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>用户认证与权限管理</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>商品搜索与筛选功能</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>购物车与订单管理</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skills-assessment">
+                    <h3><i class="fas fa-tasks"></i> 技能评估</h3>
+                    <p>请根据您的实际情况，选择是否掌握以下技能：</p>
+
+                    <div class="skill-category">
+                        <div class="category-header">
+                            <i class="fas fa-laptop-code"></i>
+                            <div class="category-title">前端基础技能</div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">HTML5语义化标签</div>
+                                <div class="skill-description">能够正确使用HTML5语义化标签构建页面结构</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="html5">是</button>
+                                <button class="option-btn" data-skill="html5">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">CSS3布局与动画</div>
+                                <div class="skill-description">掌握Flexbox、Grid布局，能够实现CSS动画效果</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="css3">是</button>
+                                <button class="option-btn" data-skill="css3">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">JavaScript ES6+</div>
+                                <div class="skill-description">熟练掌握ES6+语法，包括箭头函数、解构、Promise等</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="javascript">是</button>
+                                <button class="option-btn" data-skill="javascript">否</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="category-header">
+                            <i class="fab fa-react"></i>
+                            <div class="category-title">框架与工具</div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">React框架使用</div>
+                                <div class="skill-description">能够使用React进行组件化开发，掌握Hooks使用</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="react">是</button>
+                                <button class="option-btn" data-skill="react">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">状态管理(Redux)</div>
+                                <div class="skill-description">掌握Redux状态管理，能够处理复杂应用状态</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="redux">是</button>
+                                <button class="option-btn" data-skill="redux">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">前端路由管理</div>
+                                <div class="skill-description">能够使用React Router实现单页面应用路由</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="router">是</button>
+                                <button class="option-btn" data-skill="router">否</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="category-header">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <div class="category-title">性能与工程化</div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">Webpack配置</div>
+                                <div class="skill-description">能够配置Webpack进行项目打包和优化</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="webpack">是</button>
+                                <button class="option-btn" data-skill="webpack">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">性能优化</div>
+                                <div class="skill-description">掌握代码分割、懒加载、缓存策略等性能优化技术</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="performance">是</button>
+                                <button class="option-btn" data-skill="performance">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">跨浏览器兼容</div>
+                                <div class="skill-description">能够处理不同浏览器的兼容性问题</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="compatibility">是</button>
+                                <button class="option-btn" data-skill="compatibility">否</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="submit-section">
+                    <button class="btn btn-secondary" id="backToSelection">返回选择</button>
+                    <button class="btn btn-large" id="submitAssessment">提交测评</button>
+                </div>
+            </div>
+
+            <!-- 金融分析测评 -->
+            <div class="assessment-section" id="finance-assessment">
+                <div class="project-info">
+                    <h3><i class="fas fa-project-diagram"></i> 项目描述：企业投资组合分析与风险评估</h3>
+                    <p class="project-description">
+                        您需要为一家投资公司开发一个投资组合分析与风险评估系统。该系统需要能够分析多种金融资产，评估投资组合的风险收益特征，并提供投资建议。
+                    </p>
+                    <div class="project-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>资产收益率与波动率分析</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>投资组合风险测算</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>相关性分析与分散化效果评估</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>投资建议生成与报告输出</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skills-assessment">
+                    <h3><i class="fas fa-tasks"></i> 技能评估</h3>
+                    <p>请根据您的实际情况，选择是否掌握以下技能：</p>
+
+                    <div class="skill-category">
+                        <div class="category-header">
+                            <i class="fas fa-chart-bar"></i>
+                            <div class="category-title">金融分析基础</div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">财务报表分析</div>
+                                <div class="skill-description">能够解读资产负债表、利润表和现金流量表</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="financial_statement">是</button>
+                                <button class="option-btn" data-skill="financial_statement">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">财务比率计算</div>
+                                <div class="skill-description">掌握各类财务比率的计算方法与分析意义</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="financial_ratio">是</button>
+                                <button class="option-btn" data-skill="financial_ratio">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">投资估值模型</div>
+                                <div class="skill-description">熟悉DCF、相对估值等常用投资估值方法</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="valuation">是</button>
+                                <button class="option-btn" data-skill="valuation">否</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="category-header">
+                            <i class="fas fa-calculator"></i>
+                            <div class="category-title">量化分析技能</div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">统计分析方法</div>
+                                <div class="skill-description">掌握回归分析、时间序列分析等统计方法</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="statistics">是</button>
+                                <button class="option-btn" data-skill="statistics">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">风险管理工具</div>
+                                <div class="skill-description">熟悉VaR、CVaR等风险管理工具的应用</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="risk_management">是</button>
+                                <button class="option-btn" data-skill="risk_management">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">投资组合理论</div>
+                                <div class="skill-description">掌握现代投资组合理论及资产配置方法</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="portfolio_theory">是</button>
+                                <button class="option-btn" data-skill="portfolio_theory">否</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="category-header">
+                            <i class="fas fa-tools"></i>
+                            <div class="category-title">工具与软件</div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">Excel高级功能</div>
+                                <div class="skill-description">熟练使用Excel进行金融建模与数据分析</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="excel">是</button>
+                                <button class="option-btn" data-skill="excel">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">Python/R编程</div>
+                                <div class="skill-description">能够使用Python或R进行金融数据分析</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="programming">是</button>
+                                <button class="option-btn" data-skill="programming">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">金融数据库使用</div>
+                                <div class="skill-description">熟悉Wind、Bloomberg等金融数据库操作</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="financial_database">是</button>
+                                <button class="option-btn" data-skill="financial_database">否</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="submit-section">
+                    <button class="btn btn-secondary" id="backToSelectionFinance">返回选择</button>
+                    <button class="btn btn-large" id="submitFinanceAssessment">提交测评</button>
+                </div>
+            </div>
+
+            <!-- 制造业测评 -->
+            <div class="assessment-section" id="manufacturing-assessment">
+                <div class="project-info">
+                    <h3><i class="fas fa-project-diagram"></i> 项目描述：智能生产线优化与效率提升</h3>
+                    <p class="project-description">
+                        您需要为一家制造企业优化其生产线，提升生产效率与产品质量。项目涉及生产流程分析、设备布局优化、质量控制体系建立等。
+                    </p>
+                    <div class="project-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>生产流程分析与瓶颈识别</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>生产线布局优化设计</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>质量控制体系建立</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>生产效率提升方案</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skills-assessment">
+                    <h3><i class="fas fa-tasks"></i> 技能评估</h3>
+                    <p>请根据您的实际情况，选择是否掌握以下技能：</p>
+
+                    <div class="skill-category">
+                        <div class="category-header">
+                            <i class="fas fa-cogs"></i>
+                            <div class="category-title">生产管理</div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">生产流程分析</div>
+                                <div class="skill-description">能够分析生产流程，识别瓶颈与改进点</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="process_analysis">是</button>
+                                <button class="option-btn" data-skill="process_analysis">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">生产线平衡</div>
+                                <div class="skill-description">掌握生产线平衡理论与方法</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="line_balancing">是</button>
+                                <button class="option-btn" data-skill="line_balancing">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">产能规划</div>
+                                <div class="skill-description">能够进行产能需求分析与规划</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="capacity_planning">是</button>
+                                <button class="option-btn" data-skill="capacity_planning">否</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="category-header">
+                            <i class="fas fa-chart-line"></i>
+                            <div class="category-title">质量管理</div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">质量控制工具</div>
+                                <div class="skill-description">熟悉SPC、FMEA等质量控制工具</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="quality_tools">是</button>
+                                <button class="option-btn" data-skill="quality_tools">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">六西格玛方法</div>
+                                <div class="skill-description">了解六西格玛DMAIC改进方法</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="six_sigma">是</button>
+                                <button class="option-btn" data-skill="six_sigma">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">ISO质量管理体系</div>
+                                <div class="skill-description">熟悉ISO9001等质量管理体系要求</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="iso">是</button>
+                                <button class="option-btn" data-skill="iso">否</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="category-header">
+                            <i class="fas fa-tools"></i>
+                            <div class="category-title">技术技能</div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">CAD/CAM软件</div>
+                                <div class="skill-description">能够使用CAD/CAM软件进行设计与编程</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="cad_cam">是</button>
+                                <button class="option-btn" data-skill="cad_cam">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">自动化设备操作</div>
+                                <div class="skill-description">熟悉常见自动化设备操作与维护</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="automation">是</button>
+                                <button class="option-btn" data-skill="automation">否</button>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <div class="skill-name">精益生产</div>
+                                <div class="skill-description">掌握精益生产理念与工具应用</div>
+                            </div>
+                            <div class="skill-options">
+                                <button class="option-btn" data-skill="lean">是</button>
+                                <button class="option-btn" data-skill="lean">否</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="submit-section">
+                    <button class="btn btn-secondary" id="backToSelectionManufacturing">返回选择</button>
+                    <button class="btn btn-large" id="submitManufacturingAssessment">提交测评</button>
+                </div>
+            </div>
+
+            <!-- 结果展示区域 -->
+            <div class="result-section" id="resultSection">
+                <div class="score-display">
+                    <div class="score-circle" id="scoreValue">0</div>
+                    <div class="score-label">项目完成度得分</div>
+                </div>
+                <div class="result-message" id="resultMessage">
+                    根据您的技能评估，您的项目完成度为 <strong id="completionRate">0%</strong>。
+                </div>
+                <div class="improvement-suggestions">
+                    <h4><i class="fas fa-lightbulb"></i> 改进建议</h4>
+                    <ul class="suggestion-list" id="suggestionList">
+                        <!-- 建议内容将通过JavaScript动态生成 -->
+                    </ul>
+                </div>
+                <div class="submit-section" style="margin-top: 30px;">
+                    <button class="btn" id="retryAssessment">重新测评</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 职场实训 | Chance favors the <span class="highlight">prepared</span> mind. </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navItems = document.querySelectorAll('.nav-item');
+            const industryCategories = document.querySelectorAll('.industry-category');
+            const assessmentSections = document.querySelectorAll('.assessment-section');
+            const optionButtons = document.querySelectorAll('.option-btn');
+            const startBtn = document.getElementById('startAssessment');
+            const submitBtn = document.getElementById('submitAssessment');
+            const submitFinanceBtn = document.getElementById('submitFinanceAssessment');
+            const submitManufacturingBtn = document.getElementById('submitManufacturingAssessment');
+            const backBtns = document.querySelectorAll('[id^="backToSelection"]');
+            const resultSection = document.getElementById('resultSection');
+            const scoreValue = document.getElementById('scoreValue');
+            const completionRate = document.getElementById('completionRate');
+            const resultMessage = document.getElementById('resultMessage');
+            const suggestionList = document.getElementById('suggestionList');
+            const retryBtn = document.getElementById('retryAssessment');
+
+            // 存储用户选择的技能
+            const userSkills = {};
+            let currentIndustry = '';
+
+            // 导航栏交互效果
+            navItems.forEach(item => {
+                item.addEventListener('mouseenter', function () {
+                    this.style.backgroundColor = '#34495e';
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    this.style.backgroundColor = '';
+                });
+            });
+
+            // 行业选择功能
+            industryCategories.forEach(category => {
+                category.addEventListener('click', function () {
+                    // 移除其他选项的选中状态
+                    industryCategories.forEach(c => c.classList.remove('active'));
+                    // 添加当前选项的选中状态
+                    this.classList.add('active');
+
+                    // 记录当前选择的行业
+                    currentIndustry = this.dataset.industry;
+                });
+            });
+
+            // 开始测评
+            startBtn.addEventListener('click', function () {
+                if (!currentIndustry) {
+                    alert('请先选择一个行业');
+                    return;
+                }
+
+                // 隐藏行业选择区域
+                document.querySelector('.industry-selector').style.display = 'none';
+
+                // 显示对应行业的测评
+                const targetSection = document.getElementById(`${currentIndustry}-assessment`);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+
+                // 重置用户技能选择
+                Object.keys(userSkills).forEach(key => delete userSkills[key]);
+                resetOptionButtons();
+            });
+
+            // 返回选择
+            backBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    // 隐藏所有测评区域
+                    assessmentSections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+
+                    // 隐藏结果区域
+                    resultSection.classList.remove('active');
+
+                    // 显示行业选择区域
+                    document.querySelector('.industry-selector').style.display = 'block';
+
+                    // 重置用户技能选择
+                    Object.keys(userSkills).forEach(key => delete userSkills[key]);
+                    resetOptionButtons();
+                });
+            });
+
+            // 技能选项选择
+            optionButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const skill = this.dataset.skill;
+                    const isYes = this.textContent === '是';
+
+                    // 找到同一技能的所有按钮
+                    const skillButtons = document.querySelectorAll(`.option-btn[data-skill="${skill}"]`);
+
+                    // 移除其他按钮的选中状态
+                    skillButtons.forEach(btn => {
+                        btn.classList.remove('selected', 'yes', 'no');
+                    });
+
+                    // 设置当前按钮的选中状态
+                    this.classList.add('selected');
+                    this.classList.add(isYes ? 'yes' : 'no');
+
+                    // 记录用户选择
+                    userSkills[skill] = isYes;
+                });
+            });
+
+            // 重置选项按钮状态
+            function resetOptionButtons() {
+                optionButtons.forEach(button => {
+                    button.classList.remove('selected', 'yes', 'no');
+                });
+            }
+
+            // 提交测评
+            submitBtn.addEventListener('click', calculateScore);
+            submitFinanceBtn.addEventListener('click', calculateScore);
+            submitManufacturingBtn.addEventListener('click', calculateScore);
+
+            function calculateScore() {
+                const totalSkills = Object.keys(userSkills).length;
+
+                if (totalSkills === 0) {
+                    alert('请至少选择一个技能选项');
+                    return;
+                }
+
+                // 计算掌握的技能数量
+                const masteredSkills = Object.values(userSkills).filter(val => val === true).length;
+
+                // 计算得分
+                const score = Math.round((masteredSkills / totalSkills) * 100);
+
+                // 显示结果
+                scoreValue.textContent = score;
+                completionRate.textContent = `${score}%`;
+
+                // 根据得分设置结果消息
+                let message = '';
+                if (score >= 90) {
+                    message = '优秀！您具备了完成此项目所需的绝大部分技能，可以立即开始项目开发。';
+                } else if (score >= 70) {
+                    message = '良好！您掌握了项目所需的核心技能，但在一些高级功能上可能需要进一步学习。';
+                } else if (score >= 50) {
+                    message = '中等！您具备了一定的项目开发基础，但还需要系统学习更多技能才能独立完成项目。';
+                } else {
+                    message = '需要加强！建议您先系统学习相关基础知识，再尝试完成此类项目。';
+                }
+
+                resultMessage.innerHTML = `根据您的技能评估，您的项目完成度为 <strong>${score}%</strong>。${message}`;
+
+                // 生成改进建议
+                generateSuggestions();
+
+                // 隐藏当前测评区域
+                document.getElementById(`${currentIndustry}-assessment`).classList.remove('active');
+
+                // 显示结果区域
+                resultSection.classList.add('active');
+
+                // 滚动到结果区域
+                resultSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // 生成改进建议
+            function generateSuggestions() {
+                suggestionList.innerHTML = '';
+
+                // 找出未掌握的技能
+                const unmasteredSkills = Object.keys(userSkills).filter(skill => userSkills[skill] === false);
+
+                if (unmasteredSkills.length === 0) {
+                    suggestionList.innerHTML = '<li><i class="fas fa-check"></i> 您已掌握所有必要技能，继续保持！</li>';
+                    return;
+                }
+
+                // 为每个未掌握的技能生成建议
+                unmasteredSkills.forEach(skill => {
+                    let suggestion = '';
+
+                    // 前端开发技能建议
+                    if (currentIndustry === 'frontend') {
+                        switch (skill) {
+                            case 'html5':
+                                suggestion = '学习HTML5语义化标签，掌握现代网页结构构建方法';
+                                break;
+                            case 'css3':
+                                suggestion = '深入学习CSS3布局技术，特别是Flexbox和Grid布局';
+                                break;
+                            case 'javascript':
+                                suggestion = '系统学习JavaScript ES6+新特性，包括箭头函数、解构赋值等';
+                                break;
+                            case 'react':
+                                suggestion = '学习React框架基础，掌握组件化开发思想';
+                                break;
+                            case 'redux':
+                                suggestion = '掌握Redux状态管理，理解单向数据流概念';
+                                break;
+                            case 'router':
+                                suggestion = '学习前端路由管理，掌握单页面应用开发';
+                                break;
+                            case 'webpack':
+                                suggestion = '学习Webpack配置，掌握前端工程化工具使用';
+                                break;
+                            case 'performance':
+                                suggestion = '学习前端性能优化技巧，提升应用加载速度';
+                                break;
+                            case 'compatibility':
+                                suggestion = '学习跨浏览器兼容性处理，确保应用在不同浏览器中正常运行';
+                                break;
+                            default:
+                                suggestion = `加强${skill}相关技能的学习`;
+                        }
+                    }
+                    // 金融分析技能建议
+                    else if (currentIndustry === 'finance') {
+                        switch (skill) {
+                            case 'financial_statement':
+                                suggestion = '系统学习财务报表分析方法，理解三张报表之间的勾稽关系';
+                                break;
+                            case 'financial_ratio':
+                                suggestion = '掌握各类财务比率的计算与分析方法，理解其经济含义';
+                                break;
+                            case 'valuation':
+                                suggestion = '深入学习DCF估值模型，掌握现金流预测与折现率确定方法';
+                                break;
+                            case 'statistics':
+                                suggestion = '加强统计分析方法学习，特别是回归分析与时间序列分析';
+                                break;
+                            case 'risk_management':
+                                suggestion = '学习风险管理工具，掌握VaR、CVaR等风险度量方法';
+                                break;
+                            case 'portfolio_theory':
+                                suggestion = '深入学习现代投资组合理论，掌握资产配置与优化方法';
+                                break;
+                            case 'excel':
+                                suggestion = '提升Excel高级功能使用能力，特别是金融建模相关功能';
+                                break;
+                            case 'programming':
+                                suggestion = '学习Python或R编程，掌握金融数据分析与可视化';
+                                break;
+                            case 'financial_database':
+                                suggestion = '熟悉Wind、Bloomberg等金融数据库的操作与数据提取';
+                                break;
+                            default:
+                                suggestion = `加强${skill}相关技能的学习`;
+                        }
+                    }
+                    // 制造业技能建议
+                    else if (currentIndustry === 'manufacturing') {
+                        switch (skill) {
+                            case 'process_analysis':
+                                suggestion = '学习生产流程分析方法，掌握价值流图等工具使用';
+                                break;
+                            case 'line_balancing':
+                                suggestion = '掌握生产线平衡理论与方法，减少生产瓶颈';
+                                break;
+                            case 'capacity_planning':
+                                suggestion = '学习产能规划方法，合理配置生产资源';
+                                break;
+                            case 'quality_tools':
+                                suggestion = '掌握SPC、FMEA等质量控制工具的应用';
+                                break;
+                            case 'six_sigma':
+                                suggestion = '学习六西格玛DMAIC改进方法，提升过程能力';
+                                break;
+                            case 'iso':
+                                suggestion = '熟悉ISO9001质量管理体系要求，建立规范化流程';
+                                break;
+                            case 'cad_cam':
+                                suggestion = '学习CAD/CAM软件操作，提升设计与编程能力';
+                                break;
+                            case 'automation':
+                                suggestion = '熟悉自动化设备操作与维护，提升设备利用率';
+                                break;
+                            case 'lean':
+                                suggestion = '掌握精益生产理念，减少浪费提升效率';
+                                break;
+                            default:
+                                suggestion = `加强${skill}相关技能的学习`;
+                        }
+                    }
+                    else {
+                        suggestion = `加强${skill}相关技能的学习`;
+                    }
+
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-arrow-right"></i> ${suggestion}`;
+                    suggestionList.appendChild(li);
+                });
+            }
+
+            // 重新测评
+            retryBtn.addEventListener('click', function () {
+                // 重置所有状态
+                industryCategories.forEach(c => c.classList.remove('active'));
+                assessmentSections.forEach(section => section.classList.remove('active'));
+                resultSection.classList.remove('active');
+                document.querySelector('.industry-selector').style.display = 'block';
+                Object.keys(userSkills).forEach(key => delete userSkills[key]);
+                resetOptionButtons();
+                currentIndustry = '';
+
+                // 滚动到顶部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+
+</html>

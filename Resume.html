@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户简历中心</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(90deg, #2c3e50, #4a6491);
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: #2c3e50;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 18px 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: #34495e;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f1f1f1;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            color: #3498db;
+            padding-left: 25px;
+        }
+
+        .dropdown-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 内容区域样式 */
+        .content {
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        .content h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .module-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid #3498db;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .module-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+        }
+
+        .module-card h3 i {
+            margin-right: 12px;
+            color: #3498db;
+            font-size: 1.6rem;
+        }
+
+        .module-card p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .module-features {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .module-features li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #e0e0e0;
+            display: flex;
+            align-items: center;
+        }
+
+        .module-features li:last-child {
+            border-bottom: none;
+        }
+
+        .module-features li i {
+            margin-right: 10px;
+            color: #27ae60;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* 评分系统样式 */
+        .rating-system {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .rating-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .score-display {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-top: 20px;
+        }
+
+        .score-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #3498db;
+            margin: 10px 0;
+        }
+
+        .score-text {
+            font-size: 1.2rem;
+            color: #2c3e50;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .nav-list {
+                flex-wrap: wrap;
+            }
+
+            .nav-item {
+                flex: 1 1 33.333%;
+            }
+
+            .rating-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-item {
+                flex: 1 1 50%;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .modules {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-item {
+                flex: 1 1 100%;
+            }
+
+            .dropdown {
+                width: 100%;
+                left: 0;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 1rem;
+        }
+
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+
+        .module-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 2.5rem;
+            opacity: 0.1;
+            color: #3498db;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>用户简历中心</h1>
+        <p class="subtitle">简历中心：让每一份简历，都成为机会的敲门金砖。你的职业竞争力，从这里开始。</p>
+    </header>
+
+    <div class="container">
+        <nav class="navbar">
+            <ul class="nav-list">
+                <!-- 模块1：岗位分析 -->
+                <li class="nav-item">
+                    <a href="Post_analysis.html" class="nav-link">
+                        <i class="fas fa-home"></i>岗位分析
+                    </a>
+                    <div class="dropdown">
+                        <a href="Post_analysis.html#Basic-situation" class="dropdown-item"><i
+                                class="fas fa-star"></i>岗位信息</a>
+                        <a href="Post_analysis.html#Skill-require" class="dropdown-item"><i
+                                class="fas fa-bullhorn"></i>技能要求</a>
+                        <a href="Post_analysis.html#Skill-require" class="dropdown-item"><i
+                                class="fas fa-chart-line"></i>可视化分析</a>
+                        <a href="Post_analysis.html#Develop-path" class="dropdown-item"><i
+                                class="fas fa-question-circle"></i>职业发展路径</a>
+                    </div>
+                </li>
+
+                <!-- 模块2：用户简历 -->
+                <li class="nav-item">
+                    <a href="Resume.html" class="nav-link">
+                        <i class="fas fa-box-open"></i>用户简历
+                    </a>
+                    <div class="dropdown">
+                        <a href="Resume_excellent.html" class="dropdown-item"><i class="fas fa-laptop"></i>模范简历选</a>
+                        <a href="Resume_mould.html" class="dropdown-item"><i class="fas fa-mobile-alt"></i>简历模板</a>
+                        <a href="Resume_test.html" class="dropdown-item"><i class="fas fa-cloud"></i>简历实训测评</a>
+
+                    </div>
+                </li>
+
+                <!-- 模块3：面试阶段-->
+                <li class="nav-item">
+                    <a href="Interview_write.html" class="nav-link">
+                        <i class="fas fa-concierge-bell"></i>笔试+面试
+                    </a>
+                    <div class="dropdown">
+                        <a href="Interview_write.html" class="dropdown-item"><i class="fas fa-palette"></i>笔试系统</a>
+                        <a href="Interview.html" class="dropdown-item"><i class="fas fa-headset"></i>面试系统</a>
+                    </div>
+                </li>
+
+                <!-- 模块4：项目阶段 -->
+                <li class="nav-item">
+                    <a href="Project.html" class="nav-link">
+                        <i class="fas fa-book"></i>项目实训
+                    </a>
+                    <div class="dropdown">
+                        <a href="Project_test.html" class="dropdown-item"><i class="fas fa-file-alt"></i>技能自测题库</a>
+                        <a href="Project_video.html" class="dropdown-item"><i class="fas fa-video"></i>视频教程</a>
+                        <a href="Project_finall_test.html" class="dropdown-item"><i class="fas fa-blog"></i>项目完成度测评</a>
+                    </div>
+                </li>
+
+                <!-- 模块5：社区讨论 -->
+                <li class="nav-item">
+                    <a href="Community.html" class="nav-link">
+                        <i class="fas fa-comments"></i>超话社区
+                    </a>
+                    <div class="dropdown">
+                        <a href="Community.html" class="dropdown-item"><i class="fas fa-hashtag"></i>超话广场</a>
+                        <a href="Community.html#hot-topics" class="dropdown-item"><i class="fas fa-fire"></i>热门话题</a>
+                        <a href="Community.html#my-posts" class="dropdown-item"><i class="fas fa-user"></i>我的帖子</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <h2>用户简历中心</h2>
+            <p>我们不仅提供工具，更提供方法；不仅展示样本，更启迪思路；不仅评价现状，更指引未来。这里是您求职路上的战略顾问，助您将个人经历淬炼为职业价值。</p>
+
+            <div class="modules">
+                <!-- 模范简历选 -->
+                <div class="module-card">
+                    <i class="fas fa-trophy module-icon"></i>
+                    <h3><i class="fas fa-trophy"></i>模范简历选</h3>
+                    <p>看“赢家”怎么写——揭秘成功入职名企的真实简历。</p>
+                    <ul class="module-features">
+                        <li><i class="fas fa-check"></i> 各行业优秀简历示例</li>
+                        <li><i class="fas fa-check"></i> 成功求职者经验分享</li>
+                        <li><i class="fas fa-check"></i> 简历撰写技巧解析</li>
+                        <li><i class="fas fa-check"></i> 行业特定简历要点</li>
+                    </ul>
+                    <a href="Resume_excellent.html" class="btn"><i class="fas fa-eye"></i> 查看模范简历</a>
+                </div>
+
+                <!-- 简历模板 -->
+                <div class="module-card">
+                    <i class="fas fa-file-download module-icon"></i>
+                    <h3><i class="fas fa-file-download"></i>简历模板</h3>
+                    <p>一秒提升专业度——海量精美模板，随心选用。
+                        好的设计，让HR多看你的简历3秒钟。</p>
+                    <ul class="module-features">
+                        <li><i class="fas fa-check"></i> 多种设计风格选择</li>
+                        <li><i class="fas fa-check"></i> 支持在线编辑和导出</li>
+                        <li><i class="fas fa-check"></i> 行业专属模板推荐</li>
+                        <li><i class="fas fa-check"></i> 定期更新最新模板</li>
+                    </ul>
+                    <a href="Resume_mould.html" class="btn"><i class="fas fa-download"></i> 挑选模板</a>
+                </div>
+
+                <!-- 简历实训评分 -->
+                <div class="module-card">
+                    <i class="fas fa-star module-icon"></i>
+                    <h3><i class="fas fa-star"></i>简历评分与优化</h3>
+                    <p>给简历做个“CT”——AI智能测评，一眼看穿简历短板。
+                        你不知道的简历问题，AI告诉你。</p>
+                    <ul class="module-features">
+                        <li><i class="fas fa-check"></i> 多维度评分体系</li>
+                        <li><i class="fas fa-check"></i> 与行业标准对比</li>
+                        <li><i class="fas fa-check"></i> 详细评分报告</li>
+                        <li><i class="fas fa-check"></i> 改进建议提示</li>
+                    </ul>
+                    <a href="Resume_test.html" class="btn" id="score-btn"><i class="fas fa-chart-bar"></i> 去评分</a>
+                </div>
+
+
+            </div>
+
+            <!-- 简历评分系统 -->
+            <div class="rating-system" id="rating-system" style="display: none;">
+                <h2><i class="fas fa-star-half-alt"></i> 简历评分系统</h2>
+                <p>给简历做个“CT”——AI智能测评，一眼看穿简历短板。
+                    你不知道的简历问题，AI告诉你。</p>
+
+                <div class="rating-form">
+                    <div class="form-group">
+                        <label for="name"><i class="fas fa-user"></i> 姓名</label>
+                        <input type="text" id="name" placeholder="请输入您的姓名">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="industry"><i class="fas fa-industry"></i> 目标行业</label>
+                        <select id="industry">
+                            <option value="">请选择目标行业</option>
+                            <option value="it">IT/互联网</option>
+                            <option value="finance">金融/银行</option>
+                            <option value="education">教育/培训</option>
+                            <option value="medical">医疗/健康</option>
+                            <option value="marketing">市场/销售</option>
+                            <option value="other">其他行业</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="position"><i class="fas fa-briefcase"></i> 目标职位</label>
+                        <input type="text" id="position" placeholder="请输入目标职位">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="experience"><i class="fas fa-chart-line"></i> 工作年限</label>
+                        <select id="experience">
+                            <option value="">请选择工作年限</option>
+                            <option value="fresh">应届毕业生</option>
+                            <option value="1-3">1-3年</option>
+                            <option value="3-5">3-5年</option>
+                            <option value="5-10">5-10年</option>
+                            <option value="10+">10年以上</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="resume-content"><i class="fas fa-file-alt"></i> 简历内容（可粘贴您的简历文本）</label>
+                        <textarea id="resume-content" placeholder="请在此处粘贴或输入您的简历内容..."></textarea>
+                    </div>
+                </div>
+
+                <button class="btn" style="width: 100%;" id="submit-rating"><i class="fas fa-calculator"></i>
+                    立即评分</button>
+
+                <div class="score-display" id="score-result" style="display: none;">
+                    <h3>您的简历评分</h3>
+                    <div class="score-value">85</div>
+                    <p class="score-text">良好！您的简历还有提升空间</p>
+                    <p>查看<a href="#" style="color: #3498db; text-decoration: underline;">详细评分报告</a>和<a href="#"
+                            style="color: #3498db; text-decoration: underline;">优化建议</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 职场实训 | Chance favors the <span class="highlight">prepared</span> mind. </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 显示/隐藏评分系统
+            const scoreBtn = document.getElementById('score-btn');
+            const ratingSystem = document.getElementById('rating-system');
+
+            scoreBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (ratingSystem.style.display === 'none') {
+                    ratingSystem.style.display = 'block';
+                    // 平滑滚动到评分系统
+                    ratingSystem.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    ratingSystem.style.display = 'none';
+                }
+            });
+
+            // 提交评分
+            const submitRating = document.getElementById('submit-rating');
+            const scoreResult = document.getElementById('score-result');
+
+            submitRating.addEventListener('click', function () {
+                // 简单验证
+                const name = document.getElementById('name').value;
+                const industry = document.getElementById('industry').value;
+                const position = document.getElementById('position').value;
+                const experience = document.getElementById('experience').value;
+                const resumeContent = document.getElementById('resume-content').value;
+
+                if (!name || !industry || !position || !experience || !resumeContent) {
+                    alert('请填写所有必填字段！');
+                    return;
+                }
+
+                // 模拟评分过程
+                submitRating.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 评分中...';
+                submitRating.disabled = true;
+
+                setTimeout(function () {
+                    // 显示评分结果
+                    scoreResult.style.display = 'block';
+                    submitRating.innerHTML = '<i class="fas fa-calculator"></i> 立即评分';
+                    submitRating.disabled = false;
+
+                    // 平滑滚动到结果
+                    scoreResult.scrollIntoView({ behavior: 'smooth' });
+                }, 2000);
+            });
+
+            // 模块卡片点击效果
+            const moduleCards = document.querySelectorAll('.module-card');
+            moduleCards.forEach(card => {
+                card.addEventListener('click', function (e) {
+                    if (e.target.tagName !== 'A' && !e.target.closest('a')) {
+                        this.style.transform = 'scale(0.98)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 200);
+                    }
+                });
+            });
+
+            // 导航栏交互效果
+            const navItems = document.querySelectorAll('.nav-item');
+
+            navItems.forEach(item => {
+                item.addEventListener('mouseenter', function () {
+                    this.style.backgroundColor = '#34495e';
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    this.style.backgroundColor = '';
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技能测试面试系统 | 职场实训沙盘</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(90deg, #2c3e50, #4a6491);
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: #2c3e50;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 18px 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: #34495e;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f1f1f1;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            color: #3498db;
+            padding-left: 25px;
+        }
+
+        .dropdown-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 内容区域样式 */
+        .content {
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        .content h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        /* 行业选择区域 */
+        .industry-selector {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .industry-selector h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .industry-selector h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .industry-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .industry-category {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .industry-category:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        .industry-category.active {
+            border-color: #3498db;
+            background: #e8f4fc;
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .category-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* 功能选择区域 */
+        .function-selector {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .function-card {
+            flex: 1;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .function-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .function-card.active {
+            border-color: #3498db;
+            background: #e8f4fc;
+        }
+
+        .function-icon {
+            font-size: 3rem;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+
+        .function-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .function-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* 面试题库区域 */
+        .interview-bank {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .interview-bank.active {
+            display: block;
+        }
+
+        .interview-bank h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .interview-bank h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .question-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .filter-select {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .questions-container {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .question-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            margin-bottom: 15px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .question-type {
+            background: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .question-text {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .question-answer {
+            margin-top: 15px;
+            padding: 15px;
+            background: #e8f4fc;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .question-answer.show {
+            display: block;
+        }
+
+        .answer-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .answer-keywords {
+            margin-top: 10px;
+        }
+
+        .keywords-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .keywords-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .keyword-tag {
+            background: #3498db;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        /* 模拟面试区域 */
+        .interview-simulation {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .interview-simulation.active {
+            display: block;
+        }
+
+        .interview-simulation h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .interview-simulation h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .interview-info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .interview-info p {
+            margin-bottom: 10px;
+        }
+
+        .interview-questions {
+            margin-bottom: 20px;
+        }
+
+        .interview-question {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            margin-bottom: 15px;
+        }
+
+        .answer-input {
+            margin-top: 15px;
+        }
+
+        .answer-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .answer-textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .interview-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        /* 结果区域 */
+        .result-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result-section.active {
+            display: block;
+        }
+
+        .score-display {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #3498db;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-label {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .result-message {
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .keyword-analysis {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .keyword-analysis h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .keyword-analysis h4 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .keyword-results {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .matched-keywords,
+        .missing-keywords {
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .matched-keywords {
+            background: #e8f6f3;
+            border: 1px solid #27ae60;
+        }
+
+        .missing-keywords {
+            background: #fdedec;
+            border: 1px solid #e74c3c;
+        }
+
+        .keywords-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .matched-keywords .keywords-title {
+            color: #27ae60;
+        }
+
+        .missing-keywords .keywords-title {
+            color: #e74c3c;
+        }
+
+        .keywords-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .keyword-tag {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .matched-keywords .keyword-tag {
+            background: #27ae60;
+            color: white;
+        }
+
+        .missing-keywords .keyword-tag {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .improvement-suggestions {
+            text-align: left;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .improvement-suggestions h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .improvement-suggestions h4 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .suggestion-list {
+            list-style: none;
+        }
+
+        .suggestion-list li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .suggestion-list li:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-list li i {
+            margin-right: 10px;
+            color: #e74c3c;
+            font-size: 0.9rem;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-large {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #219653;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .nav-list {
+                flex-wrap: wrap;
+            }
+
+            .nav-item {
+                flex: 1 1 33.333%;
+            }
+
+            .industry-categories {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+
+            .function-selector {
+                flex-direction: column;
+            }
+
+            .keyword-results {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-item {
+                flex: 1 1 50%;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .industry-categories {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .question-filters {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-item {
+                flex: 1 1 100%;
+            }
+
+            .dropdown {
+                width: 100%;
+                left: 0;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .industry-categories {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 1rem;
+        }
+
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>笔试+面试</h1>
+        <p class="subtitle">笔试是入场券，面试是决胜局。任何一环的疏漏，都可能让之前的努力付诸东流。我们的【笔试面试备考中心】，为你提供从“知识储备”到“实战演练”的一站式解决方案。</p>
+    </header>
+
+    <div class="container">
+        <nav class="navbar">
+            <ul class="nav-list">
+                <!-- 模块1：岗位分析 -->
+                <li class="nav-item">
+                    <a href="Post analysis.html" class="nav-link">
+                        <i class="fas fa-home"></i>岗位分析
+                    </a>
+                    <div class="dropdown">
+                        <a href="Post analysis.html#Basic-situation" class="dropdown-item"><i
+                                class="fas fa-star"></i>岗位信息</a>
+                        <a href="Post analysis.html#Skill-require" class="dropdown-item"><i
+                                class="fas fa-bullhorn"></i>技能要求</a>
+                        <a href="Post analysis.html#Skill-require" class="dropdown-item"><i
+                                class="fas fa-chart-line"></i>可视化分析</a>
+                        <a href="Post analysis.html#Develop-path" class="dropdown-item"><i
+                                class="fas fa-question-circle"></i>职业发展路径</a>
+                    </div>
+                </li>
+
+                <!-- 模块2：用户简历 -->
+                <li class="nav-item">
+                    <a href="Resume.html" class="nav-link">
+                        <i class="fas fa-box-open"></i>用户简历
+                    </a>
+                    <div class="dropdown">
+                        <a href="Resume_excellent.html" class="dropdown-item"><i class="fas fa-laptop"></i>模范简历选</a>
+                        <a href="Resume_mould.html" class="dropdown-item"><i class="fas fa-mobile-alt"></i>简历模板</a>
+                        <a href="Resume_test.html" class="dropdown-item"><i class="fas fa-cloud"></i>简历实训测评</a>
+
+                    </div>
+                </li>
+
+                <!-- 模块3：面试阶段-->
+                <li class="nav-item">
+                    <a href="Interview_write.html" class="nav-link">
+                        <i class="fas fa-concierge-bell"></i>笔试+面试
+                    </a>
+                    <div class="dropdown">
+                        <a href="Interview_write.html" class="dropdown-item"><i class="fas fa-palette"></i>笔试系统</a>
+                        <a href="Interview.html" class="dropdown-item"><i class="fas fa-headset"></i>面试系统</a>
+                    </div>
+                </li>
+
+                <!-- 模块4：项目阶段 -->
+                <li class="nav-item">
+                    <a href="Project.html" class="nav-link">
+                        <i class="fas fa-book"></i>项目实训
+                    </a>
+                    <div class="dropdown">
+                        <a href="Project_test.html" class="dropdown-item"><i class="fas fa-file-alt"></i>技能自测题库</a>
+                        <a href="Project_video.html" class="dropdown-item"><i class="fas fa-video"></i>视频教程</a>
+                        <a href="Project_finall_test.html" class="dropdown-item"><i class="fas fa-blog"></i>项目完成度测评</a>
+                    </div>
+                </li>
+
+                <!-- 模块5：社区讨论 -->
+                <li class="nav-item">
+                    <a href="Community.html" class="nav-link">
+                        <i class="fas fa-comments"></i>超话社区
+                    </a>
+                    <div class="dropdown">
+                        <a href="Community.html" class="dropdown-item"><i class="fas fa-hashtag"></i>超话广场</a>
+                        <a href="Community.html#hot-topics" class="dropdown-item"><i class="fas fa-fire"></i>热门话题</a>
+                        <a href="Community.html#my-posts" class="dropdown-item"><i class="fas fa-user"></i>我的帖子</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <h2>【面试备考】—— 让你和HR见面时对答如流</h2>
+            <p>功能定位： 通过经典题库与情景模拟，帮你构建答题逻辑、提升表达技巧、克服紧张情绪。</p>
+
+            <div class="industry-selector">
+                <h3><i class="fas fa-briefcase"></i> 第一步：选择行业</h3>
+                <p>请选择您要测试的行业方向</p>
+                <div class="industry-categories">
+                    <div class="industry-category" data-industry="frontend">
+                        <div class="category-icon"><i class="fas fa-code"></i></div>
+                        <div class="category-name">前端开发</div>
+                    </div>
+                    <div class="industry-category" data-industry="backend">
+                        <div class="category-icon"><i class="fas fa-server"></i></div>
+                        <div class="category-name">后端开发</div>
+                    </div>
+                    <div class="industry-category" data-industry="finance">
+                        <div class="category-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="category-name">金融分析</div>
+                    </div>
+                    <div class="industry-category" data-industry="marketing">
+                        <div class="category-icon"><i class="fas fa-bullhorn"></i></div>
+                        <div class="category-name">市场营销</div>
+                    </div>
+                    <div class="industry-category" data-industry="manufacturing">
+                        <div class="category-icon"><i class="fas fa-industry"></i></div>
+                        <div class="category-name">制造业</div>
+                    </div>
+                    <div class="industry-category" data-industry="education">
+                        <div class="category-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="category-name">教育培训</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="function-selector">
+                <div class="function-card" data-function="training">
+                    <div class="function-icon"><i class="fas fa-book-open"></i></div>
+                    <div class="function-title">面试题库</div>
+                    <div class="function-description">针对不同行业和岗位，提供特定场景的模拟练习，全方位提升你的综合面试实力。</div>
+                    <button class="btn">开始训练</button>
+                </div>
+                <div class="function-card" data-function="interview">
+                    <div class="function-icon"><i class="fas fa-user-tie"></i></div>
+                    <div class="function-title">模拟面试</div>
+                    <div class="function-description">克服“开口没逻辑，见面就紧张”的难题，我们为你搭建了安全的演练舞台</div>
+                    <button class="btn">开始模拟</button>
+                </div>
+            </div>
+
+            <!-- 面试题库区域 -->
+            <div class="interview-bank" id="interview-bank">
+                <h3><i class="fas fa-book-open"></i> 面试题库</h3>
+                <p>请选择题目类型进行练习</p>
+
+                <div class="question-filters">
+                    <select class="filter-select" id="question-type">
+                        <option value="all">全部类型</option>
+                        <option value="technical">技术问题</option>
+                        <option value="behavioral">行为问题</option>
+                        <option value="scenario">场景问题</option>
+                    </select>
+                    <button class="btn" id="load-questions">加载题目</button>
+                </div>
+
+                <div class="questions-container" id="questions-container">
+                    <!-- 题目将通过JavaScript动态生成 -->
+                </div>
+            </div>
+
+            <!-- 模拟面试区域 -->
+            <div class="interview-simulation" id="interview-simulation">
+                <h3><i class="fas fa-user-tie"></i> 模拟面试</h3>
+                <p>请回答以下面试问题，AI将根据您的回答内容进行关键词抓取和评分</p>
+
+                <div class="interview-info">
+                    <p><strong>面试规则：</strong></p>
+                    <p>1. 本次模拟面试共5道题目，包含技术问题和行为问题</p>
+                    <p>2. 请认真思考后回答，尽量包含相关关键词</p>
+                    <p>3. 完成所有题目后请点击"提交面试"按钮</p>
+                </div>
+
+                <div class="interview-questions" id="interview-questions">
+                    <!-- 面试题目将通过JavaScript动态生成 -->
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" id="prev-question">上一题</button>
+                    <button class="btn" id="next-question">下一题</button>
+                    <button class="btn btn-success" id="submit-interview">提交面试</button>
+                </div>
+            </div>
+
+            <!-- 结果展示区域 -->
+            <div class="result-section" id="result-section">
+                <div class="score-display">
+                    <div class="score-circle" id="score-value">0</div>
+                    <div class="score-label">模拟面试得分</div>
+                </div>
+                <div class="result-message" id="result-message">
+                    根据您的回答情况，您的模拟面试得分为 <strong id="completion-rate">0</strong> 分。
+                </div>
+
+                <div class="keyword-analysis">
+                    <h4><i class="fas fa-search"></i> 关键词分析</h4>
+                    <div class="keyword-results">
+                        <div class="matched-keywords">
+                            <div class="keywords-title"><i class="fas fa-check-circle"></i> 匹配的关键词</div>
+                            <div class="keywords-list" id="matched-keywords">
+                                <!-- 匹配的关键词将通过JavaScript动态生成 -->
+                            </div>
+                        </div>
+                        <div class="missing-keywords">
+                            <div class="keywords-title"><i class="fas fa-times-circle"></i> 缺失的关键词</div>
+                            <div class="keywords-list" id="missing-keywords">
+                                <!-- 缺失的关键词将通过JavaScript动态生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="improvement-suggestions">
+                    <h4><i class="fas fa-lightbulb"></i> 改进建议</h4>
+                    <ul class="suggestion-list" id="suggestion-list">
+                        <!-- 建议内容将通过JavaScript动态生成 -->
+                    </ul>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn" id="retry-interview">重新面试</button>
+                    <button class="btn btn-secondary" id="back-to-training">返回训练</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 职场实训 | Chance favors the <span class="highlight">prepared</span> mind. </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navItems = document.querySelectorAll('.nav-item');
+            const industryCategories = document.querySelectorAll('.industry-category');
+            const functionCards = document.querySelectorAll('.function-card');
+            const interviewBank = document.getElementById('interview-bank');
+            const interviewSimulation = document.getElementById('interview-simulation');
+            const resultSection = document.getElementById('result-section');
+            const loadQuestionsBtn = document.getElementById('load-questions');
+            const questionsContainer = document.getElementById('questions-container');
+            const interviewQuestions = document.getElementById('interview-questions');
+            const submitInterviewBtn = document.getElementById('submit-interview');
+            const prevQuestionBtn = document.getElementById('prev-question');
+            const nextQuestionBtn = document.getElementById('next-question');
+            const retryInterviewBtn = document.getElementById('retry-interview');
+            const backToTrainingBtn = document.getElementById('back-to-training');
+            const scoreValue = document.getElementById('score-value');
+            const completionRate = document.getElementById('completion-rate');
+            const resultMessage = document.getElementById('result-message');
+            const matchedKeywords = document.getElementById('matched-keywords');
+            const missingKeywords = document.getElementById('missing-keywords');
+            const suggestionList = document.getElementById('suggestion-list');
+
+            // 存储用户选择的行业和当前状态
+            let currentIndustry = '';
+            let currentFunction = '';
+            let currentInterviewQuestion = 0;
+            let userInterviewAnswers = [];
+
+            // 导航栏交互效果
+            navItems.forEach(item => {
+                item.addEventListener('mouseenter', function () {
+                    this.style.backgroundColor = '#34495e';
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    this.style.backgroundColor = '';
+                });
+            });
+
+            // 行业选择功能
+            industryCategories.forEach(category => {
+                category.addEventListener('click', function () {
+                    // 移除其他选项的选中状态
+                    industryCategories.forEach(c => c.classList.remove('active'));
+                    // 添加当前选项的选中状态
+                    this.classList.add('active');
+
+                    // 记录当前选择的行业
+                    currentIndustry = this.dataset.industry;
+
+                    // 重置功能选择
+                    functionCards.forEach(card => card.classList.remove('active'));
+                    interviewBank.classList.remove('active');
+                    interviewSimulation.classList.remove('active');
+                    resultSection.classList.remove('active');
+                });
+            });
+
+            // 功能选择
+            functionCards.forEach(card => {
+                card.addEventListener('click', function () {
+                    if (!currentIndustry) {
+                        alert('请先选择一个行业');
+                        return;
+                    }
+
+                    // 移除其他选项的选中状态
+                    functionCards.forEach(c => c.classList.remove('active'));
+                    // 添加当前选项的选中状态
+                    this.classList.add('active');
+
+                    // 记录当前选择的功能
+                    currentFunction = this.dataset.function;
+
+                    // 显示对应的功能区域
+                    if (currentFunction === 'training') {
+                        interviewBank.classList.add('active');
+                        interviewSimulation.classList.remove('active');
+                        resultSection.classList.remove('active');
+
+                        // 加载题目
+                        loadQuestions();
+                    } else if (currentFunction === 'interview') {
+                        interviewBank.classList.remove('active');
+                        interviewSimulation.classList.add('active');
+                        resultSection.classList.remove('active');
+
+                        // 初始化模拟面试
+                        initInterview();
+                    }
+                });
+            });
+
+            // 加载题目
+            function loadQuestions() {
+                // 清空题目容器
+                questionsContainer.innerHTML = '';
+
+                // 根据行业和筛选条件加载题目
+                const questionType = document.getElementById('question-type').value;
+
+                // 模拟题目数据
+                const questions = getQuestionsByIndustry(currentIndustry, questionType);
+
+                // 生成题目HTML
+                questions.forEach((question, index) => {
+                    const questionItem = document.createElement('div');
+                    questionItem.className = 'question-item';
+
+                    questionItem.innerHTML = `
+                        <div class="question-header">
+                            <span class="question-number">问题 ${index + 1}</span>
+                            <span class="question-type">${getQuestionTypeText(question.type)}</span>
+                        </div>
+                        <div class="question-text">${question.text}</div>
+                        <div class="question-answer">
+                            <div class="answer-title">参考答案：</div>
+                            <div>${question.answer}</div>
+                            <div class="answer-keywords">
+                                <div class="keywords-title">关键词：</div>
+                                <div class="keywords-list">
+                                    ${question.keywords.map(keyword =>
+                        `<span class="keyword-tag">${keyword}</span>`
+                    ).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn" style="margin-top: 10px;" onclick="this.parentElement.querySelector('.question-answer').classList.toggle('show')">
+                            查看答案
+                        </button>
+                    `;
+
+                    questionsContainer.appendChild(questionItem);
+                });
+            }
+
+            // 初始化模拟面试
+            function initInterview() {
+                // 重置面试状态
+                currentInterviewQuestion = 0;
+                userInterviewAnswers = [];
+
+                // 清空面试题目容器
+                interviewQuestions.innerHTML = '';
+
+                // 根据行业生成面试题目
+                const interviewQuestionsData = getInterviewQuestionsByIndustry(currentIndustry);
+
+                // 生成面试题目HTML
+                interviewQuestionsData.forEach((question, index) => {
+                    const interviewQuestion = document.createElement('div');
+                    interviewQuestion.className = 'interview-question';
+                    interviewQuestion.style.display = index === 0 ? 'block' : 'none';
+
+                    interviewQuestion.innerHTML = `
+                        <div class="question-header">
+                            <span class="question-number">问题 ${index + 1}</span>
+                            <span class="question-type">${getQuestionTypeText(question.type)}</span>
+                        </div>
+                        <div class="question-text">${question.text}</div>
+                        <div class="answer-input">
+                            <textarea class="answer-textarea" placeholder="请输入您的回答..." rows="4"></textarea>
+                        </div>
+                    `;
+
+                    interviewQuestions.appendChild(interviewQuestion);
+
+                    // 添加答案输入事件
+                    const textarea = interviewQuestion.querySelector('textarea');
+                    textarea.addEventListener('input', function () {
+                        // 记录用户答案
+                        userInterviewAnswers[index] = this.value;
+                    });
+                });
+
+                // 更新导航按钮状态
+                updateInterviewNavigation();
+            }
+
+            // 更新面试导航
+            function updateInterviewNavigation() {
+                prevQuestionBtn.disabled = currentInterviewQuestion === 0;
+                nextQuestionBtn.disabled = currentInterviewQuestion === interviewQuestions.children.length - 1;
+            }
+
+            // 上一题
+            prevQuestionBtn.addEventListener('click', function () {
+                if (currentInterviewQuestion > 0) {
+                    interviewQuestions.children[currentInterviewQuestion].style.display = 'none';
+                    currentInterviewQuestion--;
+                    interviewQuestions.children[currentInterviewQuestion].style.display = 'block';
+                    updateInterviewNavigation();
+                }
+            });
+
+            // 下一题
+            nextQuestionBtn.addEventListener('click', function () {
+                if (currentInterviewQuestion < interviewQuestions.children.length - 1) {
+                    interviewQuestions.children[currentInterviewQuestion].style.display = 'none';
+                    currentInterviewQuestion++;
+                    interviewQuestions.children[currentInterviewQuestion].style.display = 'block';
+                    updateInterviewNavigation();
+                }
+            });
+
+            // 提交面试
+            submitInterviewBtn.addEventListener('click', function () {
+                if (confirm('确定要提交面试吗？提交后将无法修改答案。')) {
+                    submitInterview();
+                }
+            });
+
+            // 提交面试处理
+            function submitInterview() {
+                // 计算得分和关键词分析
+                const { score, matched, missing } = analyzeInterviewAnswers();
+
+                // 显示结果
+                scoreValue.textContent = score;
+                completionRate.textContent = score;
+
+                // 根据得分设置结果消息
+                let message = '';
+                if (score >= 90) {
+                    message = '优秀！您的回答非常专业，关键词覆盖全面，可以应对实际面试挑战。';
+                } else if (score >= 70) {
+                    message = '良好！您的回答比较专业，但部分关键词可以进一步强化。';
+                } else if (score >= 60) {
+                    message = '及格！您具备了一定的面试基础，但需要加强关键词的使用。';
+                } else {
+                    message = '需要加强！建议您系统学习面试技巧，加强关键词的运用。';
+                }
+
+                resultMessage.innerHTML = `根据您的回答情况，您的模拟面试得分为 <strong>${score}</strong> 分。${message}`;
+
+                // 显示关键词分析
+                displayKeywordAnalysis(matched, missing);
+
+                // 生成改进建议
+                generateInterviewSuggestions(score, missing);
+
+                // 显示结果区域
+                interviewSimulation.classList.remove('active');
+                resultSection.classList.add('active');
+            }
+
+            // 分析面试答案
+            function analyzeInterviewAnswers() {
+                const interviewQuestionsData = getInterviewQuestionsByIndustry(currentIndustry);
+                let totalScore = 0;
+                let allMatchedKeywords = [];
+                let allMissingKeywords = [];
+
+                interviewQuestionsData.forEach((question, index) => {
+                    const userAnswer = userInterviewAnswers[index] || '';
+                    const { score, matched, missing } = analyzeAnswer(userAnswer, question.keywords);
+
+                    totalScore += score;
+                    allMatchedKeywords = allMatchedKeywords.concat(matched);
+                    allMissingKeywords = allMissingKeywords.concat(missing);
+                });
+
+                // 计算平均分
+                const averageScore = Math.round(totalScore / interviewQuestionsData.length);
+
+                // 去重关键词
+                const uniqueMatched = [...new Set(allMatchedKeywords)];
+                const uniqueMissing = [...new Set(allMissingKeywords)];
+
+                return {
+                    score: averageScore,
+                    matched: uniqueMatched,
+                    missing: uniqueMissing
+                };
+            }
+
+            // 分析单个答案
+            function analyzeAnswer(answer, expectedKeywords) {
+                const matched = [];
+                const missing = [];
+
+                // 将答案转换为小写以便比较
+                const answerLower = answer.toLowerCase();
+
+                // 检查每个关键词是否在答案中出现
+                expectedKeywords.forEach(keyword => {
+                    const keywordLower = keyword.toLowerCase();
+                    if (answerLower.includes(keywordLower)) {
+                        matched.push(keyword);
+                    } else {
+                        missing.push(keyword);
+                    }
+                });
+
+                // 计算得分（匹配的关键词比例）
+                const score = Math.round((matched.length / expectedKeywords.length) * 100);
+
+                return { score, matched, missing };
+            }
+
+            // 显示关键词分析
+            function displayKeywordAnalysis(matched, missing) {
+                // 清空关键词容器
+                matchedKeywords.innerHTML = '';
+                missingKeywords.innerHTML = '';
+
+                // 显示匹配的关键词
+                matched.forEach(keyword => {
+                    const keywordTag = document.createElement('span');
+                    keywordTag.className = 'keyword-tag';
+                    keywordTag.textContent = keyword;
+                    matchedKeywords.appendChild(keywordTag);
+                });
+
+                // 显示缺失的关键词
+                missing.forEach(keyword => {
+                    const keywordTag = document.createElement('span');
+                    keywordTag.className = 'keyword-tag';
+                    keywordTag.textContent = keyword;
+                    missingKeywords.appendChild(keywordTag);
+                });
+            }
+
+            // 生成面试改进建议
+            function generateInterviewSuggestions(score, missingKeywords) {
+                suggestionList.innerHTML = '';
+
+                const suggestions = [
+                    '加强专业知识学习，掌握行业核心概念',
+                    '练习面试表达技巧，提高回答的逻辑性和条理性',
+                    '关注行业动态，了解最新技术和发展趋势',
+                    '多参加模拟面试，积累面试经验',
+                    '针对缺失的关键词进行专项学习和练习'
+                ];
+
+                // 如果有缺失的关键词，添加针对性建议
+                if (missingKeywords.length > 0) {
+                    suggestions.push(`重点关注以下关键词的学习：${missingKeywords.join('、')}`);
+                }
+
+                suggestions.forEach(suggestion => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-arrow-right"></i> ${suggestion}`;
+                    suggestionList.appendChild(li);
+                });
+            }
+
+            // 重新面试
+            retryInterviewBtn.addEventListener('click', function () {
+                resultSection.classList.remove('active');
+                interviewSimulation.classList.add('active');
+                initInterview();
+            });
+
+            // 返回训练
+            backToTrainingBtn.addEventListener('click', function () {
+                resultSection.classList.remove('active');
+                interviewBank.classList.add('active');
+                functionCards.forEach(card => {
+                    if (card.dataset.function === 'training') {
+                        card.classList.add('active');
+                    } else {
+                        card.classList.remove('active');
+                    }
+                });
+                loadQuestions();
+            });
+
+            // 加载题目按钮
+            loadQuestionsBtn.addEventListener('click', loadQuestions);
+
+            // 根据行业获取题目数据
+            function getQuestionsByIndustry(industry, type) {
+                // 模拟题目数据
+                const questions = {
+                    frontend: [
+                        {
+                            type: 'technical',
+                            text: '请解释什么是闭包，并举例说明其应用场景。',
+                            answer: '闭包是指有权访问另一个函数作用域中变量的函数。创建闭包的常见方式是在一个函数内部创建另一个函数。应用场景包括：数据封装、模块化开发、函数柯里化等。',
+                            keywords: ['闭包', '函数作用域', '数据封装', '模块化', '柯里化']
+                        },
+                        {
+                            type: 'technical',
+                            text: '请简述React中虚拟DOM的工作原理及其优势。',
+                            answer: '虚拟DOM是React中的一种编程概念，它是一个轻量级的JavaScript对象，是真实DOM的抽象表示。当组件状态变化时，React会创建一个新的虚拟DOM树，然后与之前的虚拟DOM树进行比较，找出差异，最后只更新真实DOM中发生变化的部分。优势包括：提高性能、简化DOM操作、更好的跨平台兼容性。',
+                            keywords: ['虚拟DOM', 'React', '组件状态', '性能优化', 'DOM操作']
+                        },
+                        {
+                            type: 'behavioral',
+                            text: '请描述一个你解决过的复杂前端问题，并说明你的解决思路。',
+                            answer: '我曾经遇到一个页面性能问题，用户反馈页面加载缓慢。我通过Chrome DevTools分析发现是图片资源过大导致的。解决方案包括：实施图片懒加载、使用WebP格式替代PNG/JPG、实施代码分割和懒加载、优化CSS和JavaScript文件。最终页面加载时间减少了60%。',
+                            keywords: ['性能优化', 'Chrome DevTools', '图片懒加载', 'WebP', '代码分割']
+                        }
+                    ],
+                    finance: [
+                        {
+                            type: 'technical',
+                            text: '请解释DCF估值模型的基本原理及其应用场景。',
+                            answer: 'DCF（现金流折现）模型是通过预测公司未来的自由现金流，并以适当的折现率将其折现到当前时点，从而估算公司价值的方法。应用场景包括：企业估值、投资决策、并购分析等。',
+                            keywords: ['DCF', '现金流折现', '自由现金流', '折现率', '企业估值']
+                        },
+                        {
+                            type: 'scenario',
+                            text: '如果一家公司的流动比率突然下降，您会如何分析其原因？',
+                            answer: '我会从以下几个方面分析：1) 检查流动资产和流动负债的变化；2) 分析应收账款和存货的周转情况；3) 评估短期债务的变化；4) 查看现金流量表，了解经营现金流情况；5) 结合行业环境和公司战略变化进行分析。',
+                            keywords: ['流动比率', '流动资产', '流动负债', '应收账款', '存货周转', '现金流量']
+                        }
+                    ]
+                };
+
+                let industryQuestions = questions[industry] || questions.frontend;
+
+                // 根据类型筛选
+                if (type !== 'all') {
+                    industryQuestions = industryQuestions.filter(q => q.type === type);
+                }
+
+                return industryQuestions;
+            }
+
+            // 根据行业获取面试题目
+            function getInterviewQuestionsByIndustry(industry) {
+                // 模拟面试题目数据
+                const interviewQuestions = {
+                    frontend: [
+                        {
+                            type: 'technical',
+                            text: '请解释什么是事件委托，以及它在性能优化中的作用。',
+                            keywords: ['事件委托', '事件冒泡', '性能优化', '事件监听', 'DOM操作']
+                        },
+                        {
+                            type: 'technical',
+                            text: '请描述React Hooks的工作原理，以及useState和useEffect的常见使用场景。',
+                            keywords: ['React Hooks', 'useState', 'useEffect', '函数组件', '状态管理', '副作用']
+                        },
+                        {
+                            type: 'behavioral',
+                            text: '请描述一个你在团队合作中解决技术分歧的经历。',
+                            keywords: ['团队合作', '技术分歧', '沟通', '解决方案', '代码评审']
+                        },
+                        {
+                            type: 'scenario',
+                            text: '如果你的网站首页加载速度很慢，你会如何诊断和优化？',
+                            keywords: ['性能优化', '加载速度', '诊断工具', '资源压缩', '缓存策略', '懒加载']
+                        }
+                    ],
+                    finance: [
+                        {
+                            type: 'technical',
+                            text: '请解释资本资产定价模型（CAPM）及其在投资决策中的应用。',
+                            keywords: ['CAPM', '资本资产定价', '系统性风险', '预期收益率', '投资决策']
+                        },
+                        {
+                            type: 'scenario',
+                            text: '如果一家公司的净利润增长但经营活动现金流下降，您会如何分析？',
+                            keywords: ['净利润', '经营活动现金流', '财务分析', '盈余质量', '现金流分析']
+                        },
+                        {
+                            type: 'behavioral',
+                            text: '请描述一个你成功预测市场趋势的案例。',
+                            keywords: ['市场趋势', '预测分析', '数据分析', '行业研究', '风险评估']
+                        }
+                    ]
+                };
+
+                return interviewQuestions[industry] || interviewQuestions.frontend;
+            }
+
+            // 获取题目类型文本
+            function getQuestionTypeText(type) {
+                const typeMap = {
+                    'technical': '技术问题',
+                    'behavioral': '行为问题',
+                    'scenario': '场景问题'
+                };
+                return typeMap[type] || '未知类型';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频教程 | 职场实训沙盘</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(90deg, #2c3e50, #4a6491);
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background: #2c3e50;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 18px 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: #34495e;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .nav-link i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        /* 下拉菜单样式 */
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f1f1f1;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            color: #3498db;
+            padding-left: 25px;
+        }
+
+        .dropdown-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 内容区域样式 */
+        .content {
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        .content h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .content p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        /* 视频教程介绍区域 */
+        .video-intro {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .video-intro h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .video-intro h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        /* 行业选择区域 */
+        .industry-selector {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .industry-selector h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .industry-selector h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .industry-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .industry-category {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .industry-category:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        .industry-category.active {
+            border-color: #3498db;
+            background: #e8f4fc;
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .category-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .category-count {
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        /* 搜索区域 */
+        .search-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .search-section.active {
+            display: block;
+        }
+
+        .search-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-section h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .search-btn {
+            background: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        /* 视频教程展示区域 */
+        .videos-section {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .videos-section.active {
+            display: block;
+        }
+
+        .videos-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .videos-header h3 {
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+
+        .videos-header h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            height: 180px;
+            background: #2c3e50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(52, 152, 219, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+            background: #3498db;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .video-content {
+            padding: 20px;
+        }
+
+        .video-title {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .video-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        .video-instructor {
+            display: flex;
+            align-items: center;
+        }
+
+        .instructor-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #3498db;
+            margin-right: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            flex: 1;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #3498db;
+            color: #3498db;
+        }
+
+        .btn-outline:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        /* 搜索结果区域 */
+        .search-results {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #ddd;
+        }
+
+        /* 学习路径区域 */
+        .learning-path {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 40px;
+        }
+
+        .learning-path h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .learning-path h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .path-steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .path-step {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-weight: bold;
+        }
+
+        .step-title {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .step-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .videos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            .nav-list {
+                flex-wrap: wrap;
+            }
+
+            .nav-item {
+                flex: 1 1 33.333%;
+            }
+
+            .industry-categories {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-item {
+                flex: 1 1 50%;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .industry-categories {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .videos-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .path-steps {
+                flex-direction: column;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-item {
+                flex: 1 1 100%;
+            }
+
+            .dropdown {
+                width: 100%;
+                left: 0;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .videos-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .video-actions {
+                flex-direction: column;
+            }
+
+            .industry-categories {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 1rem;
+        }
+
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>项目实训</h1>
+        <p class="subtitle">在求职和成长的道路上，一个扎实的项目经历胜过千言万语。在这里，用最小的成本，发现并补齐最大的知识漏洞。</p>
+    </header>
+
+    <div class="container">
+        <nav class="navbar">
+            <ul class="nav-list">
+                <!-- 模块1：岗位分析 -->
+                <li class="nav-item">
+                    <a href="Post_analysis.html" class="nav-link">
+                        <i class="fas fa-home"></i>岗位分析
+                    </a>
+                    <div class="dropdown">
+                        <a href="Post_analysis.html#Basic-situation" class="dropdown-item"><i
+                                class="fas fa-star"></i>岗位信息</a>
+                        <a href="Post_analysis.html#Skill-require" class="dropdown-item"><i
+                                class="fas fa-bullhorn"></i>技能要求</a>
+                        <a href="Post_analysis.html#Skill-require" class="dropdown-item"><i
+                                class="fas fa-chart-line"></i>可视化分析</a>
+                        <a href="Post_analysis.html#Develop-path" class="dropdown-item"><i
+                                class="fas fa-question-circle"></i>职业发展路径</a>
+                    </div>
+                </li>
+
+                <!-- 模块2：用户简历 -->
+                <li class="nav-item">
+                    <a href="Resume.html" class="nav-link">
+                        <i class="fas fa-box-open"></i>用户简历
+                    </a>
+                    <div class="dropdown">
+                        <a href="Resume_excellent.html" class="dropdown-item"><i class="fas fa-laptop"></i>模范简历选</a>
+                        <a href="Resume_mould.html" class="dropdown-item"><i class="fas fa-mobile-alt"></i>简历模板</a>
+                        <a href="Resume_test.html" class="dropdown-item"><i class="fas fa-cloud"></i>简历实训测评</a>
+
+                    </div>
+                </li>
+
+                <!-- 模块3：面试阶段-->
+                <li class="nav-item">
+                    <a href="Interview_write.html" class="nav-link">
+                        <i class="fas fa-concierge-bell"></i>笔试+面试
+                    </a>
+                    <div class="dropdown">
+                        <a href="Interview_write.html" class="dropdown-item"><i class="fas fa-palette"></i>笔试系统</a>
+                        <a href="Interview.html" class="dropdown-item"><i class="fas fa-headset"></i>面试系统</a>
+                    </div>
+                </li>
+
+                <!-- 模块4：项目阶段 -->
+                <li class="nav-item">
+                    <a href="Project.html" class="nav-link">
+                        <i class="fas fa-book"></i>项目实训
+                    </a>
+                    <div class="dropdown">
+                        <a href="Project_test.html" class="dropdown-item"><i class="fas fa-file-alt"></i>技能自测题库</a>
+                        <a href="Project_video.html" class="dropdown-item"><i class="fas fa-video"></i>视频教程</a>
+                        <a href="Project_finall_test.html" class="dropdown-item"><i class="fas fa-blog"></i>项目完成度测评</a>
+                    </div>
+                </li>
+
+                <!-- 模块5：社区讨论 -->
+                <li class="nav-item">
+                    <a href="Community.html" class="nav-link">
+                        <i class="fas fa-comments"></i>超话社区
+                    </a>
+                    <div class="dropdown">
+                        <a href="Community.html" class="dropdown-item"><i class="fas fa-hashtag"></i>超话广场</a>
+                        <a href="Community.html#hot-topics" class="dropdown-item"><i class="fas fa-fire"></i>热门话题</a>
+                        <a href="Community.html#my-posts" class="dropdown-item"><i class="fas fa-user"></i>我的帖子</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <h2>视频教程</h2>
+            <p>由行业专家录制的实战视频教程，涵盖项目开发全流程，从环境搭建到项目部署，手把手教您完成真实项目。</p>
+
+            <div class="video-intro">
+                <h3><i class="fas fa-lightbulb"></i> 视频教程介绍</h3>
+                <p>我们的视频教程由一线互联网公司的资深工程师和架构师录制，内容涵盖当前最热门的技术栈和项目实战。每个课程都包含完整的项目开发流程，从需求分析、技术选型、环境搭建到代码实现和项目部署，确保您能够系统掌握项目开发的全过程。
+                </p>
+            </div>
+
+            <!-- 行业选择区域 -->
+            <div class="industry-selector">
+                <h3><i class="fas fa-briefcase"></i> 第一步：选择行业方向</h3>
+                <p>请先选择您要学习的行业方向</p>
+                <div class="industry-categories">
+                    <div class="industry-category" data-industry="tech">
+                        <div class="category-icon"><i class="fas fa-laptop-code"></i></div>
+                        <div class="category-name">信息技术</div>
+                        <div class="category-count">256个课程</div>
+                    </div>
+                    <div class="industry-category" data-industry="finance">
+                        <div class="category-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="category-name">金融财经</div>
+                        <div class="category-count">142个课程</div>
+                    </div>
+                    <div class="industry-category" data-industry="manufacturing">
+                        <div class="category-icon"><i class="fas fa-industry"></i></div>
+                        <div class="category-name">制造工业</div>
+                        <div class="category-count">98个课程</div>
+                    </div>
+                    <div class="industry-category" data-industry="marketing">
+                        <div class="category-icon"><i class="fas fa-bullhorn"></i></div>
+                        <div class="category-name">市场营销</div>
+                        <div class="category-count">87个课程</div>
+                    </div>
+                    <div class="industry-category" data-industry="healthcare">
+                        <div class="category-icon"><i class="fas fa-heartbeat"></i></div>
+                        <div class="category-name">医疗健康</div>
+                        <div class="category-count">76个课程</div>
+                    </div>
+                    <div class="industry-category" data-industry="education">
+                        <div class="category-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="category-name">教育培训</div>
+                        <div class="category-count">65个课程</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 搜索区域 -->
+            <div class="search-section" id="searchSection">
+                <h3><i class="fas fa-search"></i> 第二步：搜索课程</h3>
+                <p>在当前行业下搜索您感兴趣的课程内容</p>
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="输入关键词搜索课程...">
+                    <button class="search-btn" id="searchBtn">搜索</button>
+                </div>
+            </div>
+
+            <!-- 信息技术视频教程 -->
+            <div class="videos-section" id="tech-videos">
+                <div class="videos-header">
+                    <h3><i class="fas fa-laptop-code"></i> 信息技术课程</h3>
+                    <div>
+                        <a href="#" class="btn">查看全部256个课程</a>
+                    </div>
+                </div>
+                <div class="videos-grid">
+                    <div class="video-card" data-keywords="前端 React JavaScript">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="video-duration">4:32:15</div>
+                        </div>
+                        <div class="video-content">
+                            <h4 class="video-title">React全栈项目实战 - 电商平台开发</h4>
+                            <p class="video-description">从零开始构建完整的电商平台，包含用户系统、商品管理、购物车、订单处理等核心功能。</p>
+                            <div class="video-meta">
+                                <div class="video-instructor">
+                                    <div class="instructor-avatar">张</div>
+                                    <span>张工程师</span>
+                                </div>
+                                <div>128 课时</div>
+                            </div>
+                            <div class="video-actions">
+                                <a href="#" class="btn">立即学习</a>
+                                <a href="#" class="btn btn-outline">课程详情</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card" data-keywords="后端 Java Spring">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="video-duration">5:15:30</div>
+                        </div>
+                        <div class="video-content">
+                            <h4 class="video-title">Spring Boot微服务架构实战</h4>
+                            <p class="video-description">基于Spring Cloud构建完整的微服务架构，包含服务注册、配置中心、网关等核心组件。</p>
+                            <div class="video-meta">
+                                <div class="video-instructor">
+                                    <div class="instructor-avatar">刘</div>
+                                    <span>刘架构师</span>
+                                </div>
+                                <div>150 课时</div>
+                            </div>
+                            <div class="video-actions">
+                                <a href="#" class="btn">立即学习</a>
+                                <a href="#" class="btn btn-outline">课程详情</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card" data-keywords="Python 数据分析">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="video-duration">3:45:20</div>
+                        </div>
+                        <div class="video-content">
+                            <h4 class="video-title">Python数据分析与可视化</h4>
+                            <p class="video-description">掌握Python数据分析核心库，学习数据清洗、分析和可视化技术。</p>
+                            <div class="video-meta">
+                                <div class="video-instructor">
+                                    <div class="instructor-avatar">王</div>
+                                    <span>王数据专家</span>
+                                </div>
+                                <div>96 课时</div>
+                            </div>
+                            <div class="video-actions">
+                                <a href="#" class="btn">立即学习</a>
+                                <a href="#" class="btn btn-outline">课程详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 金融财经视频教程 -->
+            <div class="videos-section" id="finance-videos">
+                <div class="videos-header">
+                    <h3><i class="fas fa-chart-line"></i> 金融财经课程</h3>
+                    <div>
+                        <a href="#" class="btn">查看全部142个课程</a>
+                    </div>
+                </div>
+                <div class="videos-grid">
+                    <div class="video-card" data-keywords="金融 分析 Python">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="video-duration">3:45:20</div>
+                        </div>
+                        <div class="video-content">
+                            <h4 class="video-title">Python金融数据分析实战</h4>
+                            <p class="video-description">使用Python进行金融数据分析，掌握股票分析、风险评估、投资组合优化等核心技能。</p>
+                            <div class="video-meta">
+                                <div class="video-instructor">
+                                    <div class="instructor-avatar">李</div>
+                                    <span>李分析师</span>
+                                </div>
+                                <div>96 课时</div>
+                            </div>
+                            <div class="video-actions">
+                                <a href="#" class="btn">立即学习</a>
+                                <a href="#" class="btn btn-outline">课程详情</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card" data-keywords="投资 理财 基金">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="video-duration">2:58:40</div>
+                        </div>
+                        <div class="video-content">
+                            <h4 class="video-title">个人投资理财实战指南</h4>
+                            <p class="video-description">学习科学的投资理财方法，掌握基金、股票、债券等投资工具的使用技巧。</p>
+                            <div class="video-meta">
+                                <div class="video-instructor">
+                                    <div class="instructor-avatar">陈</div>
+                                    <span>陈理财师</span>
+                                </div>
+                                <div>72 课时</div>
+                            </div>
+                            <div class="video-actions">
+                                <a href="#" class="btn">立即学习</a>
+                                <a href="#" class="btn btn-outline">课程详情</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card" data-keywords="风险管理 金融">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="video-duration">3:15:30</div>
+                        </div>
+                        <div class="video-content">
+                            <h4 class="video-title">金融风险管理与合规</h4>
+                            <p class="video-description">深入理解金融风险管理框架，学习风险评估、控制和合规管理的方法。</p>
+                            <div class="video-meta">
+                                <div class="video-instructor">
+                                    <div class="instructor-avatar">赵</div>
+                                    <span>赵风控专家</span>
+                                </div>
+                                <div>84 课时</div>
+                            </div>
+                            <div class="video-actions">
+                                <a href="#" class="btn">立即学习</a>
+                                <a href="#" class="btn btn-outline">课程详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 制造工业视频教程 -->
+            <div class="videos-section" id="manufacturing-videos">
+                <div class="videos-header">
+                    <h3><i class="fas fa-industry"></i> 制造工业课程</h3>
+                    <div>
+                        <a href="#" class="btn">查看全部98个课程</a>
+                    </div>
+                </div>
+                <div class="videos-grid">
+                    <div class="video-card" data-keywords="制造 工业 4.0">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="video-duration">3:15:30</div>
+                        </div>
+                        <div class="video-content">
+                            <h4 class="video-title">工业4.0与智能制造技术</h4>
+                            <p class="video-description">深入理解工业4.0概念，掌握智能制造、物联网在制造业的应用，提升生产效率。</p>
+                            <div class="video-meta">
+                                <div class="video-instructor">
+                                    <div class="instructor-avatar">王</div>
+                                    <span>王工程师</span>
+                                </div>
+                                <div>84 课时</div>
+                            </div>
+                            <div class="video-actions">
+                                <a href="#" class="btn">立即学习</a>
+                                <a href="#" class="btn btn-outline">课程详情</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-card" data-keywords="质量管理 生产">
+                        <div class="video-thumbnail">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="video-duration">2:45:15</div>
+                        </div>
+                        <div class="video-content">
+                            <h4 class="video-title">制造业质量管理体系</h4>
+                            <p class="video-description">学习制造业质量管理方法，掌握ISO9001等质量管理体系的实施要点。</p>
+                            <div class="video-meta">
+                                <div class="video-instructor">
+                                    <div class="instructor-avatar">刘</div>
+                                    <span>刘质量专家</span>
+                                </div>
+                                <div>68 课时</div>
+                            </div>
+                            <div class="video-actions">
+                                <a href="#" class="btn">立即学习</a>
+                                <a href="#" class="btn btn-outline">课程详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 搜索结果区域 -->
+            <div class="search-results" id="searchResults">
+                <div class="videos-header">
+                    <h3><i class="fas fa-search"></i> 搜索结果</h3>
+                    <div id="searchCount">找到 0 个相关课程</div>
+                </div>
+                <div class="videos-grid" id="searchResultsGrid">
+                    <!-- 搜索结果将动态插入这里 -->
+                </div>
+            </div>
+
+            <!-- 学习路径区域 -->
+            <div class="learning-path">
+                <h3><i class="fas fa-road"></i> 系统学习路径</h3>
+                <div class="path-steps">
+                    <div class="path-step">
+                        <div class="step-number">1</div>
+                        <div class="step-title">选择行业</div>
+                        <div class="step-description">根据职业规划选择合适的行业方向</div>
+                    </div>
+                    <div class="path-step">
+                        <div class="step-number">2</div>
+                        <div class="step-title">搜索课程</div>
+                        <div class="step-description">在当前行业下搜索感兴趣的课程内容</div>
+                    </div>
+                    <div class="path-step">
+                        <div class="step-number">3</div>
+                        <div class="step-title">系统学习</div>
+                        <div class="step-description">按照课程体系进行系统化学习</div>
+                    </div>
+                    <div class="path-step">
+                        <div class="step-number">4</div>
+                        <div class="step-title">实战应用</div>
+                        <div class="step-description">将所学知识应用到实际工作中</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 职场实训 | Chance favors the <span class="highlight">prepared</span> mind. </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navItems = document.querySelectorAll('.nav-item');
+            const industryCategories = document.querySelectorAll('.industry-category');
+            const searchSection = document.getElementById('searchSection');
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const searchResults = document.getElementById('searchResults');
+            const searchResultsGrid = document.getElementById('searchResultsGrid');
+            const searchCount = document.getElementById('searchCount');
+            const videosSections = document.querySelectorAll('.videos-section');
+            const playButtons = document.querySelectorAll('.play-button');
+
+            let currentIndustry = '';
+
+            // 导航栏交互效果
+            navItems.forEach(item => {
+                item.addEventListener('mouseenter', function () {
+                    this.style.backgroundColor = '#34495e';
+                });
+
+                item.addEventListener('mouseleave', function () {
+                    this.style.backgroundColor = '';
+                });
+            });
+
+            // 行业选择功能
+            industryCategories.forEach(category => {
+                category.addEventListener('click', function () {
+                    // 移除其他选项的选中状态
+                    industryCategories.forEach(c => c.classList.remove('active'));
+                    // 添加当前选项的选中状态
+                    this.classList.add('active');
+
+                    // 获取选中的行业
+                    currentIndustry = this.dataset.industry;
+
+                    // 显示搜索区域
+                    searchSection.classList.add('active');
+
+                    // 隐藏所有视频区域
+                    videosSections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+
+                    // 隐藏搜索结果
+                    searchResults.classList.remove('active');
+
+                    // 显示对应行业的视频
+                    const targetSection = document.getElementById(`${currentIndustry}-videos`);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+
+                    // 清空搜索框
+                    searchInput.value = '';
+                });
+            });
+
+            // 搜索功能
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            function performSearch() {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+
+                if (searchTerm === '') {
+                    alert('请输入搜索关键词');
+                    return;
+                }
+
+                // 隐藏当前行业的视频区域
+                videosSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+
+                // 显示搜索结果区域
+                searchResults.classList.add('active');
+
+                // 清空之前的搜索结果
+                searchResultsGrid.innerHTML = '';
+
+                // 获取当前行业的视频卡片
+                const currentVideosSection = document.getElementById(`${currentIndustry}-videos`);
+                if (!currentVideosSection) return;
+
+                const videoCards = currentVideosSection.querySelectorAll('.video-card');
+
+                // 搜索视频
+                let searchResultsVideos = [];
+                videoCards.forEach(card => {
+                    const keywords = card.dataset.keywords.toLowerCase();
+                    const title = card.querySelector('.video-title').textContent.toLowerCase();
+                    const description = card.querySelector('.video-description').textContent.toLowerCase();
+
+                    if (keywords.includes(searchTerm) || title.includes(searchTerm) || description.includes(searchTerm)) {
+                        searchResultsVideos.push(card.outerHTML);
+                    }
+                });
+
+                // 显示搜索结果
+                if (searchResultsVideos.length > 0) {
+                    searchCount.textContent = `找到 ${searchResultsVideos.length} 个相关课程`;
+                    searchResultsGrid.innerHTML = searchResultsVideos.join('');
+
+                    // 重新绑定播放按钮事件
+                    document.querySelectorAll('.play-button').forEach(button => {
+                        button.addEventListener('click', function () {
+                            const videoCard = this.closest('.video-card');
+                            const videoTitle = videoCard.querySelector('.video-title').textContent;
+                            alert(`开始播放视频: ${videoTitle}`);
+                        });
+                    });
+                } else {
+                    searchCount.textContent = `找到 0 个相关课程`;
+                    searchResultsGrid.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-search"></i>
+                            <h3>未找到相关课程</h3>
+                            <p>请尝试使用其他关键词搜索</p>
+                        </div>
+                    `;
+                }
+            }
+
+            // 播放按钮点击效果
+            playButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const videoCard = this.closest('.video-card');
+                    const videoTitle = videoCard.querySelector('.video-title').textContent;
+                    alert(`开始播放视频: ${videoTitle}`);
+                });
+            });
+
+            // 移动设备下拉菜单处理
+            if (window.innerWidth <= 768) {
+                navItems.forEach(item => {
+                    item.addEventListener('click', function (e) {
+                        if (this.querySelector('.dropdown').style.display === 'block') {
+                            this.querySelector('.dropdown').style.display = 'none';
+                        } else {
+                            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                                dropdown.style.display = 'none';
+                            });
+                            this.querySelector('.dropdown').style.display = 'block';
+                        }
+                        e.preventDefault();
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
